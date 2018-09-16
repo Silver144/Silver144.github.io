@@ -261,6 +261,148 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/16/vimrc的基础配置/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="A">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="World">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/16/vimrc的基础配置/" itemprop="url">.vimrc的基础配置</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-16T15:55:08+08:00">
+                2018-09-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/存档/" itemprop="url" rel="index">
+                    <span itemprop="name">存档</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>说起vim的话，配置的时候到处查资料确实不快，加上平常也不用各种插件，因此就只列出.vimrc的最基础的语句<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> <span class="keyword">nu</span>   <span class="comment">"设置行号</span></span><br><span class="line"><span class="keyword">syntax</span> <span class="keyword">on</span>  <span class="comment">"设置语法高亮</span></span><br><span class="line"><span class="keyword">set</span> <span class="built_in">shiftwidth</span>=<span class="number">4</span> </span><br><span class="line"><span class="keyword">set</span> softtabstop=<span class="number">4</span>  </span><br><span class="line"><span class="keyword">set</span> tabstop=<span class="number">4</span>  <span class="comment">"以上三行设置tab宽度为4个空格</span></span><br><span class="line"><span class="keyword">set</span> expandtab  <span class="comment">"敲入tab自动转化为空格</span></span><br><span class="line"><span class="keyword">set</span> guifont=Dejavu_Sans_Mono:h10 <span class="comment">"设置字体大小(这里是DejaVu Sans Mono 10号字体)</span></span><br><span class="line"><span class="keyword">set</span> <span class="built_in">cindent</span> <span class="comment">"设置c的智能缩进</span></span><br><span class="line"><span class="keyword">filetype</span> <span class="keyword">on</span> <span class="comment">"侦测文件类型</span></span><br><span class="line"><span class="keyword">colorscheme</span> xoria256 <span class="comment">"设置主题(可以在官网上下载然后放入colors文件夹中)</span></span><br><span class="line"><span class="keyword">set</span> nocompatible <span class="comment">"去掉有关vi的一致性</span></span><br><span class="line"><span class="keyword">set</span> backspace=<span class="built_in">indent</span>,eol,start <span class="comment">"解决backsapce键不能使用的问题</span></span><br><span class="line"><span class="keyword">inoremap</span> <span class="string">' '</span><span class="string">'&lt;ESC&gt;i "自动补全'</span><span class="string">' '</span></span><br><span class="line"><span class="keyword">inoremap</span> <span class="string">" "</span><span class="string">"&lt;ESC&gt;i "</span>自动补全<span class="string">""</span></span><br><span class="line"><span class="keyword">inoremap</span> ( ()<span class="symbol">&lt;ESC&gt;</span>i <span class="comment">"自动补全()</span></span><br><span class="line"><span class="keyword">inoremap</span> [ []<span class="symbol">&lt;ESC&gt;</span>i <span class="comment">"自动补全[]</span></span><br><span class="line"><span class="keyword">inoremap</span> &#123; &#123;&#125;<span class="symbol">&lt;ESC&gt;</span>i </span><br><span class="line"><span class="keyword">inoremap</span> &#123;<span class="symbol">&lt;CR&gt;</span> &#123;<span class="symbol">&lt;CR&gt;</span>&#125;<span class="symbol">&lt;ESC&gt;</span>O</span><br><span class="line"><span class="comment">"若按下&#123;后立即按下回车就可以自动打出&#125;并缩进, 否则直接在本行输出&#123;&#125;</span></span><br><span class="line"><span class="keyword">nmap</span> <span class="symbol">&lt;C-A&gt;</span> ggVG <span class="comment">"设置Ctrl+A全选</span></span><br><span class="line"><span class="keyword">vmap</span> <span class="symbol">&lt;C-c&gt;</span> <span class="string">"+y "</span>设置Ctrl+C复制</span><br><span class="line"><span class="keyword">vmap</span> <span class="symbol">&lt;C-x&gt;</span> <span class="string">"+d "</span>设置Ctrl+<span class="keyword">X</span>剪切</span><br><span class="line"><span class="keyword">nmap</span> <span class="symbol">&lt;C-S&gt;</span> :<span class="keyword">update</span><span class="symbol">&lt;CR&gt;</span> <span class="comment">"设置Ctrl+S保存</span></span><br><span class="line"><span class="function"><span class="keyword">function</span>! <span class="title">CleverTab</span><span class="params">()</span></span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">strpart</span>( <span class="built_in">getline</span>(<span class="string">'.'</span>), <span class="number">0</span>, <span class="keyword">col</span>(<span class="string">'.'</span>)-<span class="number">1</span> ) =~ <span class="string">'^\s*$'</span></span><br><span class="line">                <span class="keyword">return</span> <span class="string">"\&lt;Tab&gt;"</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">return</span> <span class="string">"\&lt;C-N&gt;"</span></span><br><span class="line">        <span class="keyword">endif</span></span><br><span class="line"><span class="keyword">endfunction</span></span><br><span class="line"><span class="keyword">inoremap</span> <span class="symbol">&lt;Tab&gt;</span> <span class="symbol">&lt;C-R&gt;</span>=CleverTab()<span class="symbol">&lt;CR&gt;</span> <span class="comment">"tab键在文中寻找单词补全</span></span><br><span class="line"><span class="comment">"粘贴可以直接用p或者Shift+Insert</span></span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/16/东方Project-16-5-replay-解析/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -698,7 +840,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -709,12 +851,21 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">categories</span>
                 
               </div>
             
 
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
             
 
           </nav>
