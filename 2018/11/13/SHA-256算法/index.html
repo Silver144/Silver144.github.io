@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next mist use-motion" lang="en">
+<html class="theme-next gemini use-motion" lang="en">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -88,10 +88,10 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=5.1.4">
 
 
   <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
@@ -115,10 +115,10 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="SHA-256算法">
 <meta property="og:url" content="http://yoursite.com/2018/11/13/SHA-256算法/index.html">
-<meta property="og:site_name" content="World">
+<meta property="og:site_name" content="Alice Blackbarn">
 <meta property="og:description" content="1. 数据填充填充消息使数据位数与448模512同余 (n ≡ 448 mod 512)，若数据长度大于512，则以512位一组，直至最后一组长度不足512，若位数小于448，则填充至448位，若大于等于448，则填充448 + 512 - n位。此处的位数指将信息转化为二进制数的位数，如”0”的位数不为1，而是8(bit)。具体填充方法如下：以”abc”举例，其二进制码为01100001 011">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-11-13T11:44:44.184Z">
+<meta property="og:updated_time" content="2018-11-13T12:23:14.163Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SHA-256算法">
 <meta name="twitter:description" content="1. 数据填充填充消息使数据位数与448模512同余 (n ≡ 448 mod 512)，若数据长度大于512，则以512位一组，直至最后一组长度不足512，若位数小于448，则填充至448位，若大于等于448，则填充448 + 512 - n位。此处的位数指将信息转化为二进制数的位数，如”0”的位数不为1，而是8(bit)。具体填充方法如下：以”abc”举例，其二进制码为01100001 011">
@@ -129,7 +129,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Mist',
+    scheme: 'Gemini',
     version: '5.1.4',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
@@ -157,7 +157,7 @@
 
 
 
-  <title>SHA-256算法 | World</title>
+  <title>SHA-256算法 | Alice Blackbarn</title>
   
 
 
@@ -187,7 +187,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">World</span>
+        <span class="site-title">Alice Blackbarn</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -287,13 +287,13 @@
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/13/SHA-256算法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="A">
+      <meta itemprop="name" content="Alice">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="World">
+      <meta itemprop="name" content="Alice Blackbarn">
     </span>
 
     
@@ -373,7 +373,7 @@
       
 
       
-        <h1 id="1-数据填充"><a href="#1-数据填充" class="headerlink" title="1. 数据填充"></a>1. 数据填充</h1><p>填充消息使数据位数与448模512同余 (n ≡ 448 mod 512)，若数据长度大于512，则以512位一组，直至最后一组长度不足512，若位数小于448，则填充至448位，若大于等于448，则填充448 + 512 - n位。此处的位数指将信息转化为二进制数的位数，如”0”的位数不为1，而是8(bit)。具体填充方法如下：<br>以”abc”举例，其二进制码为01100001 01100010 01100110，共24位，填充时，在后面填充1个”1”，接下来全部填充”0”，此时，填充后的二进制码为01100001 01100010 01100110 10000000 … (416个0)，现在的位数已经到了448，最后我们要填充至512位，不要忘了还有长度，”abc”总长度是24位，而24以64位存储，二进制码为 …(56个0)00110000，将其填充至448位码的后面，最后全部填充0。因此，我们最后得到的填充码为01100001 01100010 01100011 10000000  …(416个0) …(56个0) 00111000，变成16进制就是<br>0x61626380&nbsp;0x00000000&nbsp;0x00000000&nbsp;0x00000000&nbsp;0x00000000&nbsp;0x00000000<br>0x00000000&nbsp;0x00000000&nbsp;0x00000000&nbsp;0x00000000&nbsp;0x00000000&nbsp;0x00000000<br>0x00000000&nbsp;0x00000000&nbsp;0x00000000&nbsp;0x00000018<br>若长度大于2^64，则只取低64位进行填充</p>
+        <h1 id="1-数据填充"><a href="#1-数据填充" class="headerlink" title="1. 数据填充"></a>1. 数据填充</h1><p>填充消息使数据位数与448模512同余 (n ≡ 448 mod 512)，若数据长度大于512，则以512位一组，直至最后一组长度不足512，若位数小于448，则填充至448位，若大于等于448，则填充448 + 512 - n位。此处的位数指将信息转化为二进制数的位数，如”0”的位数不为1，而是8(bit)。具体填充方法如下：<br>以”abc”举例，其二进制码为01100001 01100010 01100110，共24位，填充时，在后面填充1个”1”，接下来全部填充”0”，此时，填充后的二进制码为01100001 01100010 01100110 10000000 … (416个0)，现在的位数已经到了448，最后我们要填充至512位，不要忘了还有长度，”abc”总长度是24位，而24以64位存储，二进制码为 …(56个0)00110000，将其填充至448位码的后面，最后全部填充0。因此，我们最后得到的填充码为01100001 01100010 01100011 10000000  …(416个0) …(56个0) 00111000，变成16进制就是<br>0x61626380&nbsp;0x00000000&nbsp;0x00000000&nbsp;0x00000000&nbsp;0x00000000&nbsp;0x00000000<br>0x00000000&nbsp;0x00000000&nbsp;0x00000000&nbsp;0x00000000&nbsp;0x00000000&nbsp;0x00000000<br>0x00000000&nbsp;0x00000000&nbsp;0x00000000&nbsp;0x00000018<br>若长度大于2^64，则只取低64位进行填充<br><a id="more"></a></p>
 <h1 id="2-数据处理"><a href="#2-数据处理" class="headerlink" title="2. 数据处理"></a>2. 数据处理</h1><h4 id="x数组"><a href="#x数组" class="headerlink" title="x数组"></a>x数组</h4><p>用于循环中混淆数据，共64个，其取法为取前64个质数的立方根的小数部分前32bit，比如x[0] = 0x428A2F98，就是取2的3次根的小数部分前32bit。</p>
 <h4 id="W数组"><a href="#W数组" class="headerlink" title="W数组"></a>W数组</h4><p>也用于循环中混淆数据，前16个由512bit分成的16个32位数生成，第17~64的生成方法如下<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">S0 = S(<span class="number">7</span>, W[i - <span class="number">15</span>]) ^ S(<span class="number">18</span>, W[i - <span class="number">15</span>]) ^ (W[i - <span class="number">15</span>] &gt;&gt; <span class="number">3</span>);</span><br><span class="line">S1 = S(<span class="number">17</span>, W[i - <span class="number">2</span>]) ^ S(<span class="number">19</span>, W[i - <span class="number">2</span>]) ^ (W[i - <span class="number">2</span>] &gt;&gt; <span class="number">10</span>);</span><br><span class="line">W[i] = W[i - <span class="number">16</span>] + S0 + W[i - <span class="number">7</span>] + S1;</span><br></pre></td></tr></table></figure></p>
 <p>其中S(n, x)指x循环右移n位，&gt;&gt; 为位运算右移</p>
@@ -478,7 +478,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <p class="site-author-name" itemprop="name">A</p>
+              <p class="site-author-name" itemprop="name">Alice</p>
               <p class="site-description motion-element" itemprop="description"></p>
           </div>
 
@@ -559,7 +559,7 @@
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">A</span>
+  <span class="author" itemprop="copyrightHolder">Alice</span>
 
   
 </div>
@@ -573,7 +573,7 @@
 
 
 
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
 
 
 
@@ -620,9 +620,14 @@
   
 
 
+  
 
 
 
+
+
+  
+  
 
 
 
@@ -660,6 +665,21 @@
     <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
   
 
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script>
+  
+
 
   
 
@@ -672,6 +692,13 @@
 
   
   
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
 
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>

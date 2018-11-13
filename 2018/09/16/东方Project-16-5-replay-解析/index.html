@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next mist use-motion" lang="en">
+<html class="theme-next gemini use-motion" lang="en">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -88,10 +88,10 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=5.1.4">
 
 
   <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
@@ -111,12 +111,12 @@
 
 
 
-<meta name="description" content="replay的原始文件(.rpy文件) 首先我们来看一个例子，如下图 　在文件的最后，我们可以清楚地看到rep解析的各种信息，包括机签(RERERE)、日期(18/09/08)、关卡号(6)等，通过这些，网站可以正确解析出rep，但是我们的目的不仅限于此，更进一步地，我们需要解析出rep包含的最重要信息——机师在何时按了什么键。replay的解密流程 首先找到replay字符的位置，风神录之后所有">
+<meta name="description" content="replay的原始文件(.rpy文件) 首先我们来看一个例子，如下图 　在文件的最后，我们可以清楚地看到rep解析的各种信息，包括机签(RERERE)、日期(18/09/08)、关卡号(6)等，通过这些，网站可以正确解析出rep，但是我们的目的不仅限于此，更进一步地，我们需要解析出rep包含的最重要信息——机师在何时按了什么键。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="东方Project 16.5 replay文件解析">
 <meta property="og:url" content="http://yoursite.com/2018/09/16/东方Project-16-5-replay-解析/index.html">
-<meta property="og:site_name" content="World">
-<meta property="og:description" content="replay的原始文件(.rpy文件) 首先我们来看一个例子，如下图 　在文件的最后，我们可以清楚地看到rep解析的各种信息，包括机签(RERERE)、日期(18/09/08)、关卡号(6)等，通过这些，网站可以正确解析出rep，但是我们的目的不仅限于此，更进一步地，我们需要解析出rep包含的最重要信息——机师在何时按了什么键。replay的解密流程 首先找到replay字符的位置，风神录之后所有">
+<meta property="og:site_name" content="Alice Blackbarn">
+<meta property="og:description" content="replay的原始文件(.rpy文件) 首先我们来看一个例子，如下图 　在文件的最后，我们可以清楚地看到rep解析的各种信息，包括机签(RERERE)、日期(18/09/08)、关卡号(6)等，通过这些，网站可以正确解析出rep，但是我们的目的不仅限于此，更进一步地，我们需要解析出rep包含的最重要信息——机师在何时按了什么键。">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://yoursite.com/2018/09/16/东方Project-16-5-replay-解析/pic/2018_9_15/q1.jpg">
 <meta property="og:image" content="http://yoursite.com/2018/09/16/东方Project-16-5-replay-解析/pic/2018_9_15/q2.jpg">
@@ -127,10 +127,10 @@
 <meta property="og:image" content="http://yoursite.com/2018/09/16/东方Project-16-5-replay-解析/pic/2018_9_15/q7.jpg">
 <meta property="og:image" content="http://yoursite.com/2018/09/16/东方Project-16-5-replay-解析/pic/2018_9_15/q8.jpg">
 <meta property="og:image" content="http://yoursite.com/2018/09/16/东方Project-16-5-replay-解析/pic/2018_9_15/q9.jpg">
-<meta property="og:updated_time" content="2018-09-15T14:42:03.999Z">
+<meta property="og:updated_time" content="2018-11-13T12:23:57.558Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="东方Project 16.5 replay文件解析">
-<meta name="twitter:description" content="replay的原始文件(.rpy文件) 首先我们来看一个例子，如下图 　在文件的最后，我们可以清楚地看到rep解析的各种信息，包括机签(RERERE)、日期(18/09/08)、关卡号(6)等，通过这些，网站可以正确解析出rep，但是我们的目的不仅限于此，更进一步地，我们需要解析出rep包含的最重要信息——机师在何时按了什么键。replay的解密流程 首先找到replay字符的位置，风神录之后所有">
+<meta name="twitter:description" content="replay的原始文件(.rpy文件) 首先我们来看一个例子，如下图 　在文件的最后，我们可以清楚地看到rep解析的各种信息，包括机签(RERERE)、日期(18/09/08)、关卡号(6)等，通过这些，网站可以正确解析出rep，但是我们的目的不仅限于此，更进一步地，我们需要解析出rep包含的最重要信息——机师在何时按了什么键。">
 <meta name="twitter:image" content="http://yoursite.com/2018/09/16/东方Project-16-5-replay-解析/pic/2018_9_15/q1.jpg">
 
 
@@ -139,7 +139,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Mist',
+    scheme: 'Gemini',
     version: '5.1.4',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
@@ -167,7 +167,7 @@
 
 
 
-  <title>东方Project 16.5 replay文件解析 | World</title>
+  <title>东方Project 16.5 replay文件解析 | Alice Blackbarn</title>
   
 
 
@@ -197,7 +197,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">World</span>
+        <span class="site-title">Alice Blackbarn</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -297,13 +297,13 @@
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/16/东方Project-16-5-replay-解析/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="A">
+      <meta itemprop="name" content="Alice">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="World">
+      <meta itemprop="name" content="Alice Blackbarn">
     </span>
 
     
@@ -385,7 +385,8 @@
       
         <h1 id="replay的原始文件-rpy文件"><a href="#replay的原始文件-rpy文件" class="headerlink" title="replay的原始文件(.rpy文件)"></a>replay的原始文件(.rpy文件)</h1><hr>
 <h4 id="首先我们来看一个例子，如下图"><a href="#首先我们来看一个例子，如下图" class="headerlink" title="首先我们来看一个例子，如下图"></a>首先我们来看一个例子，如下图</h4><p><br><br><img src="./pic/2018_9_15/q1.jpg" alt=""><br><br></p>
-<h4 id="在文件的最后，我们可以清楚地看到rep解析的各种信息，包括机签-RERERE-、日期-18-09-08-、关卡号-6-等，通过这些，网站可以正确解析出rep，但是我们的目的不仅限于此，更进一步地，我们需要解析出rep包含的最重要信息——机师在何时按了什么键。"><a href="#在文件的最后，我们可以清楚地看到rep解析的各种信息，包括机签-RERERE-、日期-18-09-08-、关卡号-6-等，通过这些，网站可以正确解析出rep，但是我们的目的不仅限于此，更进一步地，我们需要解析出rep包含的最重要信息——机师在何时按了什么键。" class="headerlink" title="　在文件的最后，我们可以清楚地看到rep解析的各种信息，包括机签(RERERE)、日期(18/09/08)、关卡号(6)等，通过这些，网站可以正确解析出rep，但是我们的目的不仅限于此，更进一步地，我们需要解析出rep包含的最重要信息——机师在何时按了什么键。"></a>　在文件的最后，我们可以清楚地看到rep解析的各种信息，包括机签(RERERE)、日期(18/09/08)、关卡号(6)等，通过这些，网站可以正确解析出rep，但是我们的目的不仅限于此，更进一步地，我们需要解析出rep包含的最重要信息——机师在何时按了什么键。</h4><h1 id="replay的解密流程"><a href="#replay的解密流程" class="headerlink" title="replay的解密流程"></a>replay的解密流程</h1><hr>
+<h4 id="在文件的最后，我们可以清楚地看到rep解析的各种信息，包括机签-RERERE-、日期-18-09-08-、关卡号-6-等，通过这些，网站可以正确解析出rep，但是我们的目的不仅限于此，更进一步地，我们需要解析出rep包含的最重要信息——机师在何时按了什么键。"><a href="#在文件的最后，我们可以清楚地看到rep解析的各种信息，包括机签-RERERE-、日期-18-09-08-、关卡号-6-等，通过这些，网站可以正确解析出rep，但是我们的目的不仅限于此，更进一步地，我们需要解析出rep包含的最重要信息——机师在何时按了什么键。" class="headerlink" title="　在文件的最后，我们可以清楚地看到rep解析的各种信息，包括机签(RERERE)、日期(18/09/08)、关卡号(6)等，通过这些，网站可以正确解析出rep，但是我们的目的不仅限于此，更进一步地，我们需要解析出rep包含的最重要信息——机师在何时按了什么键。"></a>　在文件的最后，我们可以清楚地看到rep解析的各种信息，包括机签(RERERE)、日期(18/09/08)、关卡号(6)等，通过这些，网站可以正确解析出rep，但是我们的目的不仅限于此，更进一步地，我们需要解析出rep包含的最重要信息——机师在何时按了什么键。</h4><a id="more"></a>
+<h1 id="replay的解密流程"><a href="#replay的解密流程" class="headerlink" title="replay的解密流程"></a>replay的解密流程</h1><hr>
 <h4 id="首先找到replay字符的位置，风神录之后所有的replay解密函数均在这一块"><a href="#首先找到replay字符的位置，风神录之后所有的replay解密函数均在这一块" class="headerlink" title="首先找到replay字符的位置，风神录之后所有的replay解密函数均在这一块"></a>首先找到replay字符的位置，风神录之后所有的replay解密函数均在这一块</h4><p><br><br><img src="./pic/2018_9_15/q2.jpg" alt=""><br><br></p>
 <h4 id="点进去之后就会看到此字符串在44F960出现，追踪至44F960"><a href="#点进去之后就会看到此字符串在44F960出现，追踪至44F960" class="headerlink" title="点进去之后就会看到此字符串在44F960出现，追踪至44F960"></a>点进去之后就会看到此字符串在44F960出现，追踪至44F960</h4><p><br><br><img src="./pic/2018_9_15/q3.jpg" alt=""><br><br></p>
 <h4 id="这两个函数就是主要的解压函数了，点进去看下"><a href="#这两个函数就是主要的解压函数了，点进去看下" class="headerlink" title="这两个函数就是主要的解压函数了，点进去看下"></a>这两个函数就是主要的解压函数了，点进去看下</h4><p><br></p>
@@ -497,7 +498,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <p class="site-author-name" itemprop="name">A</p>
+              <p class="site-author-name" itemprop="name">Alice</p>
               <p class="site-description motion-element" itemprop="description"></p>
           </div>
 
@@ -578,7 +579,7 @@
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">A</span>
+  <span class="author" itemprop="copyrightHolder">Alice</span>
 
   
 </div>
@@ -592,7 +593,7 @@
 
 
 
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
 
 
 
@@ -639,9 +640,14 @@
   
 
 
+  
 
 
 
+
+
+  
+  
 
 
 
@@ -679,6 +685,21 @@
     <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
   
 
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script>
+  
+
 
   
 
@@ -691,6 +712,13 @@
 
   
   
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
 
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
