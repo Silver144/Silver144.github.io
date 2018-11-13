@@ -281,6 +281,154 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/13/SHA-256算法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="A">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="World">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/13/SHA-256算法/" itemprop="url">SHA-256算法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-13T15:54:46+08:00">
+                2018-11-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/加密算法/" itemprop="url" rel="index">
+                    <span itemprop="name">加密算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="1-数据填充"><a href="#1-数据填充" class="headerlink" title="1. 数据填充"></a>1. 数据填充</h1><p>填充消息使数据位数与448模512同余 (n ≡ 448 mod 512)，若数据长度大于512，则以512位一组，直至最后一组长度不足512，若位数小于448，则填充至448位，若大于等于448，则填充448 + 512 - n位。此处的位数指将信息转化为二进制数的位数，如”0”的位数不为1，而是8(bit)。具体填充方法如下：<br>以”abc”举例，其二进制码为01100001 01100010 01100110，共24位，填充时，在后面填充1个”1”，接下来全部填充”0”，此时，填充后的二进制码为01100001 01100010 01100110 10000000 … (416个0)，现在的位数已经到了448，最后我们要填充至512位，不要忘了还有长度，”abc”总长度是24位，而24以64位存储，二进制码为 …(56个0)00110000，将其填充至448位码的后面，最后全部填充0。因此，我们最后得到的填充码为01100001 01100010 01100011 10000000  …(416个0) …(56个0) 00111000，变成16进制就是<br>0x61626380&nbsp;0x00000000&nbsp;0x00000000&nbsp;0x00000000&nbsp;0x00000000&nbsp;0x00000000<br>0x00000000&nbsp;0x00000000&nbsp;0x00000000&nbsp;0x00000000&nbsp;0x00000000&nbsp;0x00000000<br>0x00000000&nbsp;0x00000000&nbsp;0x00000000&nbsp;0x00000018<br>若长度大于2^64，则只取低64位进行填充</p>
+<h1 id="2-数据处理"><a href="#2-数据处理" class="headerlink" title="2. 数据处理"></a>2. 数据处理</h1><h4 id="x数组"><a href="#x数组" class="headerlink" title="x数组"></a>x数组</h4><p>用于循环中混淆数据，共64个，其取法为取前64个质数的立方根的小数部分前32bit，比如x[0] = 0x428A2F98，就是取\(\sqrt[3]{2}\)的小数部分前32bit。</p>
+<h4 id="W数组"><a href="#W数组" class="headerlink" title="W数组"></a>W数组</h4><p>也用于循环中混淆数据，前16个由512bit分成的16个32位数生成，第17~64的生成方法如下<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">S(<span class="number">7</span>, W[i - <span class="number">15</span>]) ^ S(<span class="number">18</span>, W[i - <span class="number">15</span>]) ^ (W[i - <span class="number">15</span>] &gt;&gt; <span class="number">3</span>);</span><br><span class="line">S1 = S(<span class="number">17</span>, W[i - <span class="number">2</span>]) ^ S(<span class="number">19</span>, W[i - <span class="number">2</span>]) ^ (W[i - <span class="number">2</span>] &gt;&gt; <span class="number">10</span>);</span><br><span class="line">W[i] = W[i - <span class="number">16</span>] + S0 + W[i - <span class="number">7</span>] + S1;</span><br></pre></td></tr></table></figure></p>
+<p>其中S(n, x)指x循环右移n位，&gt;&gt; 为位运算右移</p>
+<h4 id="初始值与计算过程"><a href="#初始值与计算过程" class="headerlink" title="初始值与计算过程"></a>初始值与计算过程</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> H0 0x6A09E667</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> H1 0xBB67AE85</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> H2 0x3C6EF372</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> H3 0xA54FF53A</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> H4 0x510E527F</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> H5 0x9B05688C</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> H6 0x1F83D9AB</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> H7 0x5BE0CD19</span></span><br></pre></td></tr></table></figure>
+<p>将H0、H1、H2、H3、H4、H5、H6、H7的副本a、b、c、d、e、f、g、h经过64轮变换之后，再加上H0、H1、H2、H3、H4、H5、H6、H7，生成的数或参加下一组512bit的运算，或直接输出。最终的8个32位数的级联就是此次输入信息的SHA-256值。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> H0 0x6A09E667</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> H1 0xBB67AE85</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> H2 0x3C6EF372</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> H3 0xA54FF53A</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> H4 0x510E527F</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> H5 0x9B05688C</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> H6 0x1F83D9AB</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> H7 0x5BE0CD19</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S(n, x) (((x) <span class="meta-string">&lt;&lt; (32 - (n))) | ((x) &gt;&gt; (n))) /* Right-rotate */</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> k[<span class="number">64</span>] = &#123;</span><br><span class="line">    <span class="number">0x428A2F98</span>, <span class="number">0x71374491</span>, <span class="number">0xB5C0FBCF</span>, <span class="number">0xE9B5DBA5</span>, <span class="number">0x3956C25B</span>, <span class="number">0x59F111F1</span>, <span class="number">0x923F82A4</span>, <span class="number">0xAB1C5ED5</span>,      </span><br><span class="line">    <span class="number">0xD807AA98</span>, <span class="number">0x12835B01</span>, <span class="number">0x243185BE</span>, <span class="number">0x550C7DC3</span>, <span class="number">0x72BE5D74</span>, <span class="number">0x80DEB1FE</span>, <span class="number">0x9BDC06A7</span>, <span class="number">0xC19BF174</span>,        </span><br><span class="line">    <span class="number">0xE49B69C1</span>, <span class="number">0xEFBE4786</span>, <span class="number">0x0FC19DC6</span>, <span class="number">0x240CA1CC</span>, <span class="number">0x2DE92C6F</span>, <span class="number">0x4A7484AA</span>, <span class="number">0x5CB0A9DC</span>, <span class="number">0x76F988DA</span>,        </span><br><span class="line">    <span class="number">0x983E5152</span>, <span class="number">0xA831C66D</span>, <span class="number">0xB00327C8</span>, <span class="number">0xBF597FC7</span>, <span class="number">0xC6E00BF3</span>, <span class="number">0xD5A79147</span>, <span class="number">0x06CA6351</span>, <span class="number">0x14292967</span>,        </span><br><span class="line">    <span class="number">0x27B70A85</span>, <span class="number">0x2E1B2138</span>, <span class="number">0x4D2C6DFC</span>, <span class="number">0x53380D13</span>, <span class="number">0x650A7354</span>, <span class="number">0x766A0ABB</span>, <span class="number">0x81C2C92E</span>, <span class="number">0x92722C85</span>,        </span><br><span class="line">    <span class="number">0xA2BFE8A1</span>, <span class="number">0xA81A664B</span>, <span class="number">0xC24B8B70</span>, <span class="number">0xC76C51A3</span>, <span class="number">0xD192E819</span>, <span class="number">0xD6990624</span>, <span class="number">0xF40E3585</span>, <span class="number">0x106AA070</span>,       </span><br><span class="line">    <span class="number">0x19A4C116</span>, <span class="number">0x1E376C08</span>, <span class="number">0x2748774C</span>, <span class="number">0x34B0BCB5</span>, <span class="number">0x391C0CB3</span>, <span class="number">0x4ED8AA4A</span>, <span class="number">0x5B9CCA4F</span>, <span class="number">0x682E6FF3</span>,        </span><br><span class="line">    <span class="number">0x748F82EE</span>, <span class="number">0x78A5636F</span>, <span class="number">0x84C87814</span>, <span class="number">0x8CC70208</span>, <span class="number">0x90BEFFFA</span>, <span class="number">0xA4506CEB</span>, <span class="number">0xBEF9A3F7</span>, <span class="number">0xC67178F2</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> W[<span class="number">80</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> AA = H0, BB = H1, CC = H2, DD = H3, EE = H4, FF = H5, GG = H6, HH = H7;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Input to binary */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">m_convert_to_binary</span><span class="params">(<span class="keyword">char</span> *input, <span class="keyword">long</span> <span class="keyword">long</span> len, <span class="keyword">unsigned</span> <span class="keyword">int</span> *output)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++)</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = i * <span class="number">8</span>; j &lt; i * <span class="number">8</span> + <span class="number">8</span>; j++)</span><br><span class="line">            output[j] = (input[i] &gt;&gt; (<span class="number">7</span> - j % <span class="number">8</span>)) &amp; <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Num to binary */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">n_convert_to_binary</span><span class="params">(<span class="keyword">long</span> <span class="keyword">long</span> num, <span class="keyword">unsigned</span> <span class="keyword">int</span> *output)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">64</span>; i++)</span><br><span class="line">        output[i] = (num &gt;&gt; (<span class="number">63</span> - i)) &amp; <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Fill to 512-code */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fill</span><span class="params">(<span class="keyword">long</span> <span class="keyword">long</span> len, <span class="keyword">unsigned</span> <span class="keyword">int</span> *output)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(len &lt; <span class="number">448</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        output[len] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = len + <span class="number">1</span>; i &lt; <span class="number">448</span>; i++)</span><br><span class="line">            output[i] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> num_len[<span class="number">64</span>];</span><br><span class="line">    n_convert_to_binary(len, num_len);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">448</span>; i &lt; <span class="number">512</span>; i++)</span><br><span class="line">        output[i] = num_len[i - <span class="number">448</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Calculate W[i] */</span></span><br><span class="line"><span class="function"><span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="title">cal_base</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">int</span> *output, <span class="keyword">int</span> group)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> A = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = group * <span class="number">32</span>; i &lt; group * <span class="number">32</span> + <span class="number">32</span>; i++)</span><br><span class="line">        A += (output[i] &lt;&lt; (<span class="number">31</span> - (i - group * <span class="number">32</span>)));</span><br><span class="line">    <span class="keyword">return</span> A;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Generate SHA-256 value of input */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">SHA256_gen</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">16</span>; i &lt; <span class="number">64</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> S0 = S(<span class="number">7</span>, W[i - <span class="number">15</span>]) ^ S(<span class="number">18</span>, W[i - <span class="number">15</span>]) ^ (W[i - <span class="number">15</span>] &gt;&gt; <span class="number">3</span>);</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> S1 = S(<span class="number">17</span>, W[i - <span class="number">2</span>]) ^ S(<span class="number">19</span>, W[i - <span class="number">2</span>]) ^ (W[i - <span class="number">2</span>] &gt;&gt; <span class="number">10</span>);</span><br><span class="line">        W[i] = W[i - <span class="number">16</span>] + S0 + W[i - <span class="number">7</span>] + S1;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> a = AA, b = BB, c = CC, d = DD, e = EE, f = FF, g = GG, h = HH;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">64</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> S0 = S(<span class="number">2</span>, a) ^ S(<span class="number">13</span>, a) ^ S(<span class="number">22</span>, a);</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> MAJ = (a &amp; b) ^ (a &amp; c) ^ (b &amp; c);</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> T2 = S0 + MAJ;</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> S1 = S(<span class="number">6</span>, e) ^ S(<span class="number">11</span>, e) ^ S(<span class="number">25</span>, e);</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> ch = (e &amp; f) ^ ((~e) &amp; g);</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> T1 = h + S1 + ch + k[i] + W[i];</span><br><span class="line">        h = g;</span><br><span class="line">        g = f;</span><br><span class="line">        f = e;</span><br><span class="line">        e = d + T1;</span><br><span class="line">        d = c;</span><br><span class="line">        c = b;</span><br><span class="line">        b = a;</span><br><span class="line">        a = T1 + T2;</span><br><span class="line">    &#125;</span><br><span class="line">    AA += a, BB += b, CC += c, DD += d, EE += e, FF += f, GG += g, HH += h;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> input[<span class="number">64</span>];</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> output[<span class="number">520</span>];</span><br><span class="line">    <span class="built_in">memset</span>(input, <span class="number">0</span>, <span class="keyword">sizeof</span>(input));</span><br><span class="line">    <span class="built_in">memset</span>(output, <span class="number">0</span> , <span class="keyword">sizeof</span>(output));</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%[^\n]"</span>, input);</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> len = <span class="built_in">strlen</span>(input);</span><br><span class="line">    m_convert_to_binary(input, len, output);</span><br><span class="line">    fill(len * <span class="number">8</span>, output);</span><br><span class="line">    <span class="built_in">memset</span>(W, <span class="number">0</span>, <span class="keyword">sizeof</span>(W));</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">16</span>; i++)</span><br><span class="line">        W[i] = cal_base(output, i);</span><br><span class="line">    SHA256_gen();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"SHA256: %08X%08X%08X%08X%08X%08X%08X%08X\n"</span>, AA, BB, CC, DD, EE, FF, GG, HH);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>例如”abcd”的SHA-256值为：88D4266FD4E6338D13B845FCF289579D209C897823B9217DA3E161936F031589</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/12/SHA1算法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1052,7 +1200,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
