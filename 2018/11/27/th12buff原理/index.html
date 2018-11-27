@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=DejaVu Sans Mono:300,300italic,400,400italic,700,700italic|DejaVu Sans Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. 1.25倍弹速首先找到ins505所在的内存区域 1234567891011121314151600418068   &amp;gt; \33C9          xor ecx,ecx ;  Case 1F9 of switch 004155250041806A   .  8BC3          mov eax,ebx0041806C   .  E8 8F280000   call th12">
+<meta property="og:type" content="article">
+<meta property="og:title" content="th12buff原理">
+<meta property="og:url" content="http://yoursite.com/2018/11/27/th12buff原理/index.html">
+<meta property="og:site_name" content="Alice Blackbarn">
+<meta property="og:description" content="1. 1.25倍弹速首先找到ins505所在的内存区域 1234567891011121314151600418068   &amp;gt; \33C9          xor ecx,ecx ;  Case 1F9 of switch 004155250041806A   .  8BC3          mov eax,ebx0041806C   .  E8 8F280000   call th12">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2018-11-27T07:00:47.154Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="th12buff原理">
+<meta name="twitter:description" content="1. 1.25倍弹速首先找到ins505所在的内存区域 1234567891011121314151600418068   &amp;gt; \33C9          xor ecx,ecx ;  Case 1F9 of switch 004155250041806A   .  8BC3          mov eax,ebx0041806C   .  E8 8F280000   call th12">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/27/th12buff原理/"/>
+
+
+
+
+
+  <title>th12buff原理 | Alice Blackbarn</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Alice Blackbarn</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/27/th12buff原理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Alice Blackbarn">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">th12buff原理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-27T13:41:27+08:00">
+                2018-11-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/东方Projects/" itemprop="url" rel="index">
+                    <span itemprop="name">东方Projects</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-1-25倍弹速"><a href="#1-1-25倍弹速" class="headerlink" title="1. 1.25倍弹速"></a>1. 1.25倍弹速</h1><p>首先找到ins505所在的内存区域</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">00418068   &gt; \33C9          xor ecx,ecx ;  Case 1F9 of switch 00415525</span><br><span class="line">0041806A   .  8BC3          mov eax,ebx</span><br><span class="line">0041806C   .  E8 8F280000   call th12.0041A900</span><br><span class="line">00418071   .  69C0 14020000 imul eax,eax,0x214</span><br><span class="line">00418077   .  8B93 4C170000 mov edx,dword ptr ds：[ebx+0x174C]</span><br><span class="line">0041807D   .  8D3418        lea esi,dword ptr ds:[eax+ebx]</span><br><span class="line">00418080   .  8B42 04       mov eax,dword ptr ds:[edx+0x4]</span><br><span class="line">00418083   .  B9 01000000   mov ecx,0x1</span><br><span class="line">00418088   .  E8 330E0500   call th12.00468EC0</span><br><span class="line">0041808D   .  B9 02000000   mov ecx,0x2</span><br><span class="line">00418092   .  D99E A4040000 fstp dword ptr ds:[esi+0x4A4]</span><br><span class="line">00418098   .  8B9B 4C170000 mov ebx,dword ptr ds:[ebx+0x174C]</span><br><span class="line">0041809E   .  8B43 04       mov eax,dword ptr ds:[ebx+0x4]</span><br><span class="line">004180A1   .  E8 1A0E0500   call th12.00468EC0</span><br><span class="line">004180A6   .  D99E A8040000 fstp dword ptr ds:[esi+0x4A8]</span><br><span class="line">004180AC   .  E9 7A150000   jmp th12.0041962B</span><br></pre></td></tr></table></figure>
+<p>可以很明显看出，0x418092处的代码中，ds:[esi+0x4A4]就是存储弹幕速度的参数之一，0x4180A6同理，因此，乘以1.25就应该作如下处理：新开辟一块代码块，然后写上我们的代码<br><a id="more"></a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">00497AD5      50            push eax</span><br><span class="line">00497AD6      B8 0000A03F   mov eax,0x3FA00000                       ;  浮点数1.25</span><br><span class="line">00497ADB      50            push eax</span><br><span class="line">00497ADC      D80C24        fmul dword ptr ss:[esp]</span><br><span class="line">00497ADF      D99E A4040000 fstp dword ptr ds:[esi+0x4A4]</span><br><span class="line">00497AE5    ^ E9 AE05F8FF   jmp th12.00418098</span><br><span class="line">00497AEA      50            push eax</span><br><span class="line">00497AEB      B8 0000A03F   mov eax,0x3FA00000</span><br><span class="line">00497AF0      50            push eax</span><br><span class="line">00497AF1      D80C24        fmul dword ptr ss:[esp]</span><br><span class="line">00497AF4      D99E A8040000 fstp dword ptr ds:[esi+0x4A8]</span><br><span class="line">00497AFA    ^ E9 AD05F8FF   jmp th12.004180AC</span><br></pre></td></tr></table></figure></p>
+<p>原来的则变成了<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">00418092     /E9 3EFA0700   jmp th12.00497AD5</span><br><span class="line">00418097     |90            nop</span><br><span class="line">00418098   . |8B9B 4C170000 mov ebx,dword ptr ds:[ebx+0x174C]</span><br><span class="line">0041809E   . |8B43 04       mov eax,dword ptr ds:[ebx+0x4]</span><br><span class="line">004180A1   . |E8 1A0E0500   call th12.00468EC0</span><br><span class="line">004180A6     |E9 3FFA0700   jmp th12.00497AEA</span><br><span class="line">004180AB     |90            nop</span><br></pre></td></tr></table></figure></p>
+<h4 id="注意：ins521有相同功能，需要同时改"><a href="#注意：ins521有相同功能，需要同时改" class="headerlink" title="注意：ins521有相同功能，需要同时改"></a>注意：ins521有相同功能，需要同时改</h4><hr>
+<h1 id="2-残机-1和bomb-1"><a href="#2-残机-1和bomb-1" class="headerlink" title="2. 残机+1和bomb+1"></a>2. 残机+1和bomb+1</h1><p>通过ce我们可以找到残机储存地址为0x4B0C98，bomb储存地址为0x4B0CA0，于是我们先取出来然后加1就可以了<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">add_player</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	hSnapshot = OpenProcess(PROCESS_ALL_ACCESS, <span class="literal">false</span>, (DWORD)pe.th32ProcessID);</span><br><span class="line">	<span class="keyword">int</span> player;</span><br><span class="line">	ReadProcessMemory(hSnapshot, (LPVOID)<span class="number">0x004B0C98</span>, &amp;player, <span class="number">4</span>, <span class="literal">NULL</span>);</span><br><span class="line">	player++;</span><br><span class="line">	WriteProcessMemory(hSnapshot, (LPVOID)<span class="number">0x004B0C98</span>, &amp;player, <span class="number">4</span>, <span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">add_bomb</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	hSnapshot = OpenProcess(PROCESS_ALL_ACCESS, <span class="literal">false</span>, (DWORD)pe.th32ProcessID);</span><br><span class="line">	<span class="keyword">int</span> bomb = <span class="number">0</span>;</span><br><span class="line">	ReadProcessMemory(hSnapshot, (LPVOID)<span class="number">0x004B0CA0</span>, &amp;bomb, <span class="number">4</span>, <span class="literal">NULL</span>);</span><br><span class="line">	bomb++;</span><br><span class="line">	WriteProcessMemory(hSnapshot, (LPVOID)<span class="number">0x004B0CA0</span>, &amp;bomb, <span class="number">4</span>, <span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="3-miss不会损失power"><a href="#3-miss不会损失power" class="headerlink" title="3. miss不会损失power"></a>3. miss不会损失power</h1><p>通过ce我们可以找到power存储在0x40BC48，通过ce的跟踪功能我们故意miss一次就可以得到miss掉p的函数所在<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">00439440  /$  A1 480C4B00   mov eax,dword ptr ds:[0x4B0C48]</span><br><span class="line">00439445  |.  2B4424 04     sub eax,dword ptr ss:[esp+0x4]</span><br><span class="line">00439449  |.  8B0D D40C4B00 mov ecx,dword ptr ds:[0x4B0CD4]</span><br><span class="line">0043944F  |.  3BC1          cmp eax,ecx                              ;  th12.&lt;ModuleEntryPoint&gt;</span><br><span class="line">00439451  |.  A3 480C4B00   mov dword ptr ds:[0x4B0C48],eax</span><br><span class="line">00439456  |.  7D 06         jge short th12.0043945E</span><br><span class="line">00439458  |.  890D 480C4B00 mov dword ptr ds:[0x4B0C48],ecx          ;  th12.&lt;ModuleEntryPoint&gt;</span><br><span class="line">0043945E  |&gt;  33C0          xor eax,eax</span><br><span class="line">00439460  \.  C2 0400       retn 0x4</span><br></pre></td></tr></table></figure></p>
+<p>把0x439445处nop掉就可以了</p>
+<hr>
+<h1 id="4-可续关"><a href="#4-可续关" class="headerlink" title="4.可续关"></a>4.可续关</h1><p>首先我们可以看到，miss处的汇编为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">004381E0  /$  51            push ecx                                 ;  th12.&lt;ModuleEntryPoint&gt;</span><br><span class="line">004381E1  |.  53            push ebx</span><br><span class="line">004381E2  |.  BB 01000000   mov ebx,0x1</span><br><span class="line">004381E7      291D 980C4B00 sub dword ptr ds:[0x4B0C98],ebx</span><br><span class="line">004381ED  |.  55            push ebp</span><br><span class="line">004381EE  |.  57            push edi                                 ;  th12.&lt;ModuleEntryPoint&gt;</span><br><span class="line">004381EF  |.  78 19         js short th12.0043820A</span><br><span class="line">004381F1  |.  A1 9C0C4B00   mov eax,dword ptr ds:[0x4B0C9C]</span><br><span class="line">004381F6  |.  8B0D 980C4B00 mov ecx,dword ptr ds:[0x4B0C98]</span><br><span class="line">004381FC  |.  8B15 E4434B00 mov edx,dword ptr ds:[0x4B43E4]</span><br><span class="line">00438202  |.  50            push eax</span><br><span class="line">00438203  |.  51            push ecx                                 ;  th12.&lt;ModuleEntryPoint&gt;</span><br><span class="line">00438204  |.  52            push edx                                 ;  th12.&lt;ModuleEntryPoint&gt;</span><br><span class="line">00438205  |.  E8 564CFEFF   call th12.0041CE60</span><br></pre></td></tr></table></figure></p>
+<p>可以看出，miss后残机减1，然后可以推出0x4381F1~0x438205处是用来更新屏幕上的player显示数目的。我们顺便可以看到扔雷函数中也有一处更新bomb数的汇编<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">00422F20  /$  A1 A00C4B00   mov eax,dword ptr ds:[0x4B0CA0]</span><br><span class="line">00422F25  |.  83E8 01       sub eax,0x1</span><br><span class="line">00422F28  |.  A3 A00C4B00   mov dword ptr ds:[0x4B0CA0],eax</span><br><span class="line">00422F2D  |.  79 04         jns short th12.00422F33</span><br><span class="line">00422F2F  |.  33C0          xor eax,eax</span><br><span class="line">00422F31  |.  EB 0A         jmp short th12.00422F3D</span><br><span class="line">00422F33  |&gt;  83F8 08       cmp eax,0x8</span><br><span class="line">00422F36  |.  7E 0A         jle short th12.00422F42</span><br><span class="line">00422F38  |.  B8 08000000   mov eax,0x8</span><br><span class="line">00422F3D  |&gt;  A3 A00C4B00   mov dword ptr ds:[0x4B0CA0],eax</span><br><span class="line">00422F42  |&gt;  8B0D E4434B00 mov ecx,dword ptr ds:[0x4B43E4]</span><br><span class="line">00422F48  |.  85C9          test ecx,ecx                             ;  th12.&lt;ModuleEntryPoint&gt;</span><br><span class="line">00422F4A  |.  74 0E         je short th12.00422F5A</span><br><span class="line">00422F4C  |.  8B15 A40C4B00 mov edx,dword ptr ds:[0x4B0CA4]</span><br><span class="line">00422F52  |.  52            push edx                                 ;  th12.&lt;ModuleEntryPoint&gt;</span><br><span class="line">00422F53  |.  50            push eax</span><br><span class="line">00422F54  |.  51            push ecx                                 ;  th12.&lt;ModuleEntryPoint&gt;</span><br><span class="line">00422F55  |.  E8 E69FFFFF   call th12.0041CF40</span><br><span class="line">00422F5A  \&gt;  C3            retn</span><br></pre></td></tr></table></figure></p>
+<p>可以以后用来借鉴，于是，我们可以这么改<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">00497B</span>34      <span class="number">833</span>D <span class="number">980</span>C4B00&gt;cmp dword ptr ds:[<span class="number">0x4B0C98</span>],<span class="number">0x0</span>          ;  比较残机是否为<span class="number">0</span></span><br><span class="line"><span class="number">00497B</span>3B      <span class="number">75</span> <span class="number">55</span>         jnz <span class="keyword">short</span> th12b<span class="number">.00497B</span>92</span><br><span class="line"><span class="number">00497B</span>3D      C705 <span class="number">980</span>C4B00&gt;mov dword ptr ds:[<span class="number">0x4B0C98</span>],<span class="number">0x3</span></span><br><span class="line"><span class="number">00497B</span>47      C705 A00C4B00&gt;mov dword ptr ds:[<span class="number">0x4B0CA0</span>],<span class="number">0x2</span></span><br><span class="line"><span class="number">00497B</span>51      <span class="number">50</span>            push eax</span><br><span class="line"><span class="number">00497B</span>52      <span class="number">51</span>            push ecx                                 ;  </span><br><span class="line"><span class="number">00497B</span>53      <span class="number">52</span>            push edx                                 ;  </span><br><span class="line"><span class="number">00497B</span>54      B8 <span class="number">02000000</span>   mov eax,<span class="number">0x2</span></span><br><span class="line"><span class="number">00497B</span>59      <span class="number">8B</span>0D E4434B00 mov ecx,dword ptr ds:[<span class="number">0x4B43E4</span>]</span><br><span class="line"><span class="number">00497B</span>5F      <span class="number">8B</span>15 A40C4B00 mov edx,dword ptr ds:[<span class="number">0x4B0CA4</span>]</span><br><span class="line"><span class="number">00497B</span>65      <span class="number">52</span>            push edx                                 ;  </span><br><span class="line"><span class="number">00497B</span>66      <span class="number">50</span>            push eax</span><br><span class="line"><span class="number">00497B</span>67      <span class="number">51</span>            push ecx                                 ;  </span><br><span class="line"><span class="number">00497B</span>68      E8 D353F8FF   call th12b<span class="number">.0041</span>CF40                      ;  更新bomb渲染</span><br><span class="line"><span class="number">00497B</span>6D      <span class="number">5</span>A            pop edx                                  ;  </span><br><span class="line"><span class="number">00497B</span>6E      <span class="number">59</span>            pop ecx                                  ;  </span><br><span class="line"><span class="number">00497B</span>6F      <span class="number">58</span>            pop eax                                  ;  </span><br><span class="line"><span class="number">00497B</span>70      <span class="number">813</span>D <span class="number">480</span>C4B00&gt;cmp dword ptr ds:[<span class="number">0x4B0C48</span>],<span class="number">0xC8</span></span><br><span class="line"><span class="number">00497B</span>7A      <span class="number">73</span> <span class="number">0</span>C         jnb <span class="keyword">short</span> th12b<span class="number">.00497B</span>88</span><br><span class="line"><span class="number">00497B</span>7C      C705 <span class="number">480</span>C4B00&gt;mov dword ptr ds:[<span class="number">0x4B0C48</span>],<span class="number">0x190</span></span><br><span class="line"><span class="number">00497B</span>86      EB <span class="number">0</span>A         jmp <span class="keyword">short</span> th12b<span class="number">.00497B</span>92</span><br><span class="line"><span class="number">00497B</span>88      C705 <span class="number">980</span>C4B00&gt;mov dword ptr ds:[<span class="number">0x4B0C98</span>],<span class="number">0x1F4</span>        ;  power置成<span class="number">500</span></span><br><span class="line"><span class="number">00497B</span>92      <span class="number">291</span>D <span class="number">980</span>C4B00 sub dword ptr ds:[<span class="number">0x4B0C98</span>],ebx</span><br><span class="line"><span class="number">00497B</span>98    ^ E9 <span class="number">5006F</span>AFF   jmp th12b<span class="number">.004381</span>ED</span><br></pre></td></tr></table></figure></p>
+<p>原来的地方就会跳转到这里<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">004381E7   . /E9 48F90500   jmp th12b.00497B34</span><br><span class="line">004381EC     |90            nop</span><br></pre></td></tr></table></figure></p>
+<p>这个过程中出现过一次power为500的bug，但后面没有复现，，，</p>
+<hr>
+<h1 id="5-上下左右键封印"><a href="#5-上下左右键封印" class="headerlink" title="5. 上下左右键封印"></a>5. 上下左右键封印</h1><p>只需要挂个钩子就行了</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> cntHook1 = <span class="number">1</span>, cntHook2 = <span class="number">1</span>;</span><br><span class="line">HHOOK KeyHook1, KeyHook2;</span><br><span class="line"></span><br><span class="line"><span class="function">LRESULT CALLBACK <span class="title">KeyProc1</span><span class="params">(<span class="keyword">int</span> nCode, WPARAM wParam, LPARAM lParam)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (nCode != HC_ACTION) </span><br><span class="line">		<span class="keyword">return</span> CallNextHookEx(KeyHook1, nCode, wParam, lParam);</span><br><span class="line">	PKBDLLHOOKSTRUCT LowKey = <span class="literal">NULL</span>;</span><br><span class="line">	LowKey = (PKBDLLHOOKSTRUCT)lParam;</span><br><span class="line">	<span class="keyword">if</span> (LowKey-&gt;vkCode == VK_UP)</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">if</span> (LowKey-&gt;vkCode == VK_DOWN)</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">return</span> CallNextHookEx(KeyHook1, nCode, wParam, lParam);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">LRESULT CALLBACK <span class="title">KeyProc2</span><span class="params">(<span class="keyword">int</span> nCode, WPARAM wParam, LPARAM lParam)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (nCode != HC_ACTION)</span><br><span class="line">		<span class="keyword">return</span> CallNextHookEx(KeyHook2, nCode, wParam, lParam);</span><br><span class="line">	PKBDLLHOOKSTRUCT LowKey = <span class="literal">NULL</span>;</span><br><span class="line">	LowKey = (PKBDLLHOOKSTRUCT)lParam;</span><br><span class="line">	<span class="keyword">if</span> (LowKey-&gt;vkCode == VK_LEFT)</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">if</span> (LowKey-&gt;vkCode == VK_RIGHT)</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">return</span> CallNextHookEx(KeyHook2, nCode, wParam, lParam);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setHook1</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (!cntHook1)</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	cntHook1 = <span class="number">0</span>;</span><br><span class="line">	KeyHook1 = SetWindowsHookEx(WH_KEYBOARD_LL, KeyProc1, GetModuleHandle(<span class="literal">NULL</span>), <span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setHook2</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (!cntHook2)</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	cntHook2 = <span class="number">0</span>;</span><br><span class="line">	KeyHook2 = SetWindowsHookEx(WH_KEYBOARD_LL, KeyProc2, GetModuleHandle(<span class="literal">NULL</span>), <span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">unHook1</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (cntHook1)</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	cntHook1 = <span class="number">1</span>;</span><br><span class="line">	UnhookWindowsHookEx(KeyHook1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">unHook2</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (cntHook2)</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	cntHook2 = <span class="number">1</span>;</span><br><span class="line">	UnhookWindowsHookEx(KeyHook2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="6-修改data文件夹"><a href="#6-修改data文件夹" class="headerlink" title="6. 修改data文件夹"></a>6. 修改data文件夹</h1><p>其实只要修改data文件名就可以了，使用rename函数</p>
+<blockquote>
+<p>rename(“data”, “data_b”);<br>rename(“databr”, “data”);</p>
+</blockquote>
+<p>配合<a href="https://github.com/xfgryujk/THResHack" target="_blank" rel="noopener">神器</a>就可以方便改游戏读取内容了，上面的代码可以使用完整路径</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/14/base64加密算法/" rel="next" title="base64加密算法">
+                <i class="fa fa-chevron-left"></i> base64加密算法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.cirno.com.cn" title="wasupandceacar" target="_blank">wasupandceacar</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-1-25倍弹速"><span class="nav-number">1.</span> <span class="nav-text">1. 1.25倍弹速</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#注意：ins521有相同功能，需要同时改"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">注意：ins521有相同功能，需要同时改</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-残机-1和bomb-1"><span class="nav-number">2.</span> <span class="nav-text">2. 残机+1和bomb+1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-miss不会损失power"><span class="nav-number">3.</span> <span class="nav-text">3. miss不会损失power</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-可续关"><span class="nav-number">4.</span> <span class="nav-text">4.可续关</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-上下左右键封印"><span class="nav-number">5.</span> <span class="nav-text">5. 上下左右键封印</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-修改data文件夹"><span class="nav-number">6.</span> <span class="nav-text">6. 修改data文件夹</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/z16.model.json"},"display":{"position":"left","width":150,"height":300},"mobile":{"show":true},"log":false});</script></body>
+</html>
