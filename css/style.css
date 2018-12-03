@@ -845,7 +845,7 @@ body {
   cursor: url("images/icon.png"), default;
 }
 .outer {
-  max-width: 964px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
   positon: relative;
@@ -1434,7 +1434,7 @@ a.article-title:hover {
   line-height: 1.4em;
   padding: 6px 15px;
   border-radius: 15px;
-  background: rgba(241,108,227,0.8);
+  background: rgba(18,143,196,0.8);
   color: #fff;
   text-shadow: 0 1px #fff;
   text-decoration: none;
@@ -1908,10 +1908,10 @@ a.article-title:hover {
 }
 .article-entry pre,
 .article-entry .highlight {
-  border-left: 5px solid #eb3c3c;
-  background: #9d0f3c;
-  margin: 0 -20px;
-  padding: 15px 20px;
+  background: #2d2d2d;
+  border-left: 0px;
+  margin: 5px, 10px, 5px, 10px;
+  padding: 10px 20px;
   overflow: auto;
   color: #ccc;
   line-height: 22.400000000000002px;
@@ -1926,7 +1926,7 @@ a.article-title:hover {
 }
 .article-entry pre,
 .article-entry code {
-  font-family: "Source Code Pro", Consolas, Monaco, Menlo, Consolas, monospace;
+  font-family: DejaVu Sans Mono;
 }
 .article-entry code {
   background: #eee;
@@ -1953,7 +1953,7 @@ a.article-title:hover {
 }
 .article-entry .highlight figcaption {
   font-size: 0.85em;
-  color: #999;
+  color: #4dbede;
   line-height: 1em;
   margin-bottom: 1em;
 }
@@ -1970,7 +1970,7 @@ a.article-title:hover {
 }
 .article-entry .highlight .gutter pre {
   text-align: right;
-  padding-right: 20px;
+  padding-right: 10px;
 }
 .article-entry .highlight .line {
   height: 22.400000000000002px;
@@ -1984,11 +1984,11 @@ a.article-title:hover {
   border-color: #ddd;
   border-width: 1px 0;
   background: #2d2d2d;
-  padding: 15px 20px 15px 0;
+  padding: 10px 20px 10px 0;
 }
 .article-entry .gist .gist-file {
   border: none;
-  font-family: "Source Code Pro", Consolas, Monaco, Menlo, Consolas, monospace;
+  font-family: DejaVu Sans Mono;
   margin: 0;
 }
 .article-entry .gist .gist-file .gist-data {
@@ -2010,8 +2010,8 @@ a.article-title:hover {
 }
 .article-entry .gist .gist-file .gist-meta {
   background: #2d2d2d;
-  color: #999;
-  font: 0.85em "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #4dbede;
+  font: 0.85em ejaVu Sans Mono;
   text-shadow: 0 0;
   padding: 0;
   margin-top: 1em;
@@ -2026,7 +2026,7 @@ a.article-title:hover {
 }
 pre .comment,
 pre .title {
-  color: #999;
+  color: #4dbede;
 }
 pre .variable,
 pre .attribute,
@@ -2048,7 +2048,7 @@ pre .built_in,
 pre .literal,
 pre .params,
 pre .constant {
-  color: #f99157;
+  color: #fcf0a1;
 }
 pre .class,
 pre .ruby .class .title,
