@@ -845,7 +845,7 @@ body {
   cursor: url("images/icon.png"), default;
 }
 .outer {
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 0 20px;
   positon: relative;
@@ -1910,8 +1910,8 @@ a.article-title:hover {
 .article-entry .highlight {
   background: #2d2d2d;
   border-left: 0px;
-  margin: 5px, 10px, 5px, 10px;
-  padding: 10px 20px;
+  margin: 1.5cm 0cm;
+  padding: 5px 20px;
   overflow: auto;
   color: #ccc;
   line-height: 22.400000000000002px;
@@ -2283,7 +2283,7 @@ pre .javascript .function {
   box-shadow: 0 -1px 4px #ccc inset;
   border: 1px solid #ccc;
   padding: 15px;
-  border-radius: 3px;
+  border-radius: 1px;
 }
 .widget a {
   color: #258fb8;
@@ -2312,13 +2312,13 @@ pre .javascript .function {
 .widget ul,
 .widget ol {
   list-style: none;
-  margin: 0;
+  margin: 0, 0, 0, 0;
 }
 .widget ul ul,
 .widget ol ul,
 .widget ul ol,
 .widget ol ol {
-  margin: 0 20px;
+  margin: 0 0px;
 }
 .widget ul ul,
 .widget ol ul {
@@ -2358,7 +2358,7 @@ pre .javascript .function {
   padding: 5px;
 }
 .author {
-  margin: 10px 0px;
+  margin: 0px 0px;
   font-size: 0.8em;
   font-weight: bold;
   text-align: center;

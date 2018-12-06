@@ -6,10 +6,34 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-12-02T07:52:48.138Z</updated>
+  <updated>2018-12-06T10:19:52.188Z</updated>
   <id>http://yoursite.com/</id>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>latex-Greek</title>
+    <link href="http://yoursite.com/2018/12/06/latex-Greek/"/>
+    <id>http://yoursite.com/2018/12/06/latex-Greek/</id>
+    <published>2018-12-06T10:14:37.000Z</published>
+    <updated>2018-12-06T10:19:52.188Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="https://www.zizi.world/pic/latex-Greek.png" alt=""></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;&lt;img src=&quot;https://www.zizi.world/pic/latex-Greek.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+
+      
+    
+    </summary>
+    
+      <category term="存档" scheme="http://yoursite.com/categories/%E5%AD%98%E6%A1%A3/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>th12buff原理</title>
