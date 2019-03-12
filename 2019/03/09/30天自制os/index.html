@@ -12,7 +12,7 @@
 <meta property="og:site_name" content="Alice Blackbarn">
 <meta property="og:description" content="MathJax.Hub.Config({tex2jax: {inlineMath: [[&apos;$&apos;,&apos;$&apos;], [&apos;\\(&apos;,&apos;\\)&apos;]]}});   Day 0了解基本信息 1 . 此书所述的操作系统是用C语言和汇编写成的 2 . 此书的操作环境为Windows 3 . 步骤为，编写源代码-&amp;gt;编译成机器语言-&amp;gt;生成软盘镜像文件-&amp;gt;写入磁盘并作成启动盘 4 . 阶段性计划">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-09T03:33:37.931Z">
+<meta property="og:updated_time" content="2019-03-12T13:51:26.510Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="30天自制os">
 <meta name="twitter:description" content="MathJax.Hub.Config({tex2jax: {inlineMath: [[&apos;$&apos;,&apos;$&apos;], [&apos;\\(&apos;,&apos;\\)&apos;]]}});   Day 0了解基本信息 1 . 此书所述的操作系统是用C语言和汇编写成的 2 . 此书的操作环境为Windows 3 . 步骤为，编写源代码-&amp;gt;编译成机器语言-&amp;gt;生成软盘镜像文件-&amp;gt;写入磁盘并作成启动盘 4 . 阶段性计划">
@@ -161,11 +161,46 @@
 <p>2 . 段描述符包括段长，段界限，段属性</p>
 <p>首先初始了8192个段，程序中界定了两个段，第一个大小为0xffffffff，基地址为0x00000000，属性为0x4092，第二个大小为0x0007ffff，基地址为0x00280000，属性为0x409a，使用LGDT命令将GDT加载到0x00270000</p>
 <p>IDT为中断描述符表，CPU在执行中断程序时，会在IDT中查找对应的中断服务程序，详细内容作者准备第二天再讲</p>
+<h3 id="Day-6"><a href="#Day-6" class="headerlink" title="Day 6"></a><strong>Day 6</strong></h3><p>开始的工作是分割了源文件，组织头文件，以及整理了Makefile文件，使得结构更加清晰易懂，编译速度也更快，接下来对Day 5的GDT的知识做了相关补充</p>
+<p>1 . GDTR为48位，高32位存放GDT基址，低16位存放GDT限长(为GDT字节数-1)，IDTR类似</p>
+<p>2 . 在段描述符中，存在把段基址和段大小分成若干部分的现象，这是为了与之前的80286时代的程序兼容</p>
+<p>3 . 实际上段界限最多只有20位，表面上有3个字节，实际上有4bit为段属性，这样的话，段的大小最大为1M，但是如果把单位解释称页，就可以达到4G</p>
+<p>4 . 设置段属性的作用是防止非特权级程序访问系统专用段，从而危害操作系统</p>
+<p>接下来是中断的一些重要知识</p>
+<p>1 . PIC分为主从PCI，从PIC连接到主PIC的IRQ2上</p>
+<p>2 . PIC内部有中断屏蔽寄存器，8位对应8路IRQ信号，用于忽视中断请求，还有初始化控制数据ICW，ICW1、ICW4用于设置电气参数，ICW3设置为00000100是因为IRQ2用于驱动从PIC，ICW2决定用哪一个管脚通知CPU</p>
+<p>3 . int 0x00~0x1f不能用于IRQ，故用int 0x20~0x2f接收IRQ0~15，键盘是IRQ1，鼠标是IRQ12，而对于部分计算机PIC初始化时会产生IRQ7中断</p>
+<p>4 . 在调用inthandler21时，需要保护现场(相关寄存器压栈)，执行完返回前要恢复现场(寄存器出栈)，然后执行IRETD</p>
+<p>5 . 使用中断处理函数前，需要在IDT中进行注册，这样，CPU在发生中断时，就会自动调用相关处理函数，我在这里修改了一下函数，如果发生键盘中断，则显示keyboard interruption!</p>
+<p>测试成功</p>
+<h3 id="Day-7"><a href="#Day-7" class="headerlink" title="Day 7"></a><strong>Day 7</strong></h3><p>接着上一天的工作，在处理键盘中断的同时获得按键的编码，在此之前，在inthandler21函数中添加一句io_out8(PIC_OCW2, 0x61); 使得PIC能够继续监视IRQ1中断，读取0x60端口的数据，即为大小为8bit的按键编码</p>
+<p>为了减少中断服务程序的大小，暂时设立了一个大小为1个字节的缓冲区，并修改HariMain函数使得产生键盘中断时能够CPU能够被唤醒并打印数据，平常情况则休眠，但是如果中断的频率过多则会遗漏，因此要制作FIFO缓冲区</p>
+<p>1 . 根据先来先处理的原则，此缓冲区为FIFO缓冲区</p>
+<p>2 . 缓冲区整合为结构体更加灵活，不仅可以任意取地址，而且可以设置标记来标注其状态</p>
+<p>为了能够接收鼠标中断，要先令鼠标控制电路有效，再令鼠标有效，实际上如果键盘控制电路有效则鼠标电路就有效，然而键盘控制电路并没有CPU快，故许需要等到键盘控制电路可以处理信息时CPU再发送指令，设置为鼠标模式，然后激活鼠标，此时，鼠标会产生一个中断，此处修改了一下代码，若鼠标产生中断，则显示mouse interruption!</p>
+<p>测试成功</p>
+<p>接下来是获得从鼠标发送来鼠标的数据，根据代码可以看出，除了分别通知PIC1、PIC0，IRQ12、IRQ2的受理已经完成，其他的几乎一样，且读数据的端口也是0x60端口，有缓冲区的帮助，获得并使用鼠标数据的方法也简单了，但是我们使用鼠标是为了让它动起来，于是需要把数据进行适当的转换，这就是下一天的工作了</p>
+<h3 id="Day-8"><a href="#Day-8" class="headerlink" title="Day 8"></a><strong>Day 8</strong></h3><p>这一天的首要工作是解读鼠标的信息，并让鼠标在屏幕上移动</p>
+<p>1 . 鼠标发送3个字节的信息为1组，一开始的工作是将3个字节的信息分别放入一个特定的数组，完成后一起显示到屏幕上，其中关于鼠标数据的信息可以整合成结构体</p>
+<p>2 . 在MOUSE_DEC结构体中，unsigned char buf[3]存储鼠标发送的3个字节，phase为其存到第n个字节的状态标识，x为buf[1]的内容，y为buf[2]的内容，根据测试，x、y的含义分别是一段时间内鼠标横纵坐标的<strong>相对变化量</strong>，鼠标的btn为buf[0]的第0~2位，<strong>0~2位为1分别代表操作了左键、右键、滚轮</strong>，根据buf[0]第4位、第5位的值分别对x、y做出修正(实则为将16位负数变为64位负数)，通过初始坐标我们就能计算鼠标的实时坐标</p>
+<p>3 . 在绘制鼠标的时候，注意鼠标不能越界，同时，绘制新的鼠标和坐标前，要先将原来的数据和鼠标用背景色填充，这样，鼠标就可以绘制出来，而且其坐标也能一清二楚，不过需要注意其坐标原点位于左上顶点</p>
+<p>接下来要讨论进入32位模式前的一些工作</p>
+<p>在看的另一本参考书中，进入保护模式的主要步骤有以下几个</p>
+<p>1 . 准备GDT</p>
+<p>2 . 用LGDT加载GDTR</p>
+<p>3 . 打开A20地址线</p>
+<p>4 . 置cr0的PE位</p>
+<p>5 . 跳转，进入保护模式</p>
+<p>在这本书中，首先禁止了中断，防止干扰，然后打开了A20地址线，使CPU获得1M以上的寻址能力，接下来加载了临时的GDT，并设置cr0寄存器，设置PG位为0从而禁止分页，PE位为1从而切换到保护模式，然后将所有的段寄存器(除了CS)设置为0x08</p>
+<p>接下来的代码将bootpack开始的地址开始的512KB的内容复制到0x280000的位置，将0x7c00处的启动扇区复制到0x100000的位置，将0x8200处的磁盘内容复制到0x100200处，这样做是作者设计了内存分布的情况，0x100000~0x267ffff用于保存软盘的内容</p>
+<p>后面的代码就是先对bootpack.hrb中部分内容进行传送，等到没有要传送的数据的时候，从0x28001b执行bootpack.hrb</p>
+<p>接下来的作用就是将0x60端口的冗余数据清理出来，紧接着是memcpy程序，单位为4字节，asmhead.nas的最后则是定义GDT0和GDTR0，并对齐至16字节，通过代码看出，GDT0规定的<strong>可读写段从0x00000000开始，界限为0xfffff，可执行段从0x00280000开始，界限为0x7ffff</strong></p>
+<p>最后在HariMain()中创建GDT和IDT后，初始化PIC，打开中断并进行相关设备的初始化就可以处理中断了，至此，工作已经结束，其中部分问题会在以后解释</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/09/30天自制os/" data-id="cjt0x6o9r0000rsvbcaguxlsh" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/03/09/30天自制os/" data-id="cjt0xrzyo0000ikvbxtrxihev" class="article-share-link">分享</a>
       
       
     </footer>
@@ -295,8 +330,7 @@ new WOW().init();
 
 
 
-  </div>
-<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/z16.model.json"},"display":{"position":"left","width":150,"height":300},"mobile":{"show":true},"log":false});</script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config("");
 </script>
@@ -313,5 +347,6 @@ new WOW().init();
 <script type="text/javascript" src="">
 </script>
 <!-- End: Injected MathJax -->
-<!-- hexo-inject:end --></body>
+<!-- hexo-inject:end -->
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/z16.model.json"},"display":{"position":"left","width":150,"height":300},"mobile":{"show":true},"log":false});</script></body>
 </html>
