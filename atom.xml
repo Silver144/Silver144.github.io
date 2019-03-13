@@ -6,10 +6,35 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-03-12T13:51:26.510Z</updated>
+  <updated>2019-03-13T13:02:10.860Z</updated>
   <id>http://yoursite.com/</id>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Partial Differential Equation</title>
+    <link href="http://yoursite.com/2019/03/13/Partial-Differential-Equation/"/>
+    <id>http://yoursite.com/2019/03/13/Partial-Differential-Equation/</id>
+    <published>2019-03-13T12:59:38.000Z</published>
+    <updated>2019-03-13T13:02:10.860Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="To-Be-Continued-cdots"><a href="#To-Be-Continued-cdots" class="headerlink" title="To Be Continued \cdots"></a>To Be Continued <script type="math/tex">\cdots</script></h2>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;To-Be-Continued-cdots&quot;&gt;&lt;a href=&quot;#To-Be-Continued-cdots&quot; class=&quot;headerlink&quot; title=&quot;To Be Continued \cdots&quot;&gt;&lt;/a&gt;To Be Continued &lt;scrip
+      
+    
+    </summary>
+    
+      <category term="Math" scheme="http://yoursite.com/categories/Math/"/>
+    
+    
+      <category term="PDE" scheme="http://yoursite.com/tags/PDE/"/>
+    
+  </entry>
   
   <entry>
     <title>30天自制os</title>
