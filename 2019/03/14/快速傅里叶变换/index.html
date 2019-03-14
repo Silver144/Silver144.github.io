@@ -3,15 +3,19 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
-  <title>归档: 2018/9 | Alice Blackbarn</title>
+  <title>快速傅里叶变换 | Alice Blackbarn</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Alice Blackbarn">
-<meta property="og:url" content="http://yoursite.com/archives/2018/09/index.html">
+  <meta name="description" content="0x00 多项式的表示设一个n阶多项式为$S_n(x)$，其表示形式为  \sum^n_{k=1}c_nx^k1 . n维向量c = $(c_0，c_1，\cdots，c_n)$为其系数表示 2 . 将不同的n个值代入多项式$S_n(x)​$，可得到n个不同的结果，向量  (x_0，x_1，\cdots，x_n)，(y_0，y_1，\cdots，y_n) \quad(y_n=\sum^n_{k=1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="快速傅里叶变换">
+<meta property="og:url" content="http://yoursite.com/2019/03/14/快速傅里叶变换/index.html">
 <meta property="og:site_name" content="Alice Blackbarn">
+<meta property="og:description" content="0x00 多项式的表示设一个n阶多项式为$S_n(x)$，其表示形式为  \sum^n_{k=1}c_nx^k1 . n维向量c = $(c_0，c_1，\cdots，c_n)$为其系数表示 2 . 将不同的n个值代入多项式$S_n(x)​$，可得到n个不同的结果，向量  (x_0，x_1，\cdots，x_n)，(y_0，y_1，\cdots，y_n) \quad(y_n=\sum^n_{k=1">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-03-14T12:05:24.585Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Alice Blackbarn">
+<meta name="twitter:title" content="快速傅里叶变换">
+<meta name="twitter:description" content="0x00 多项式的表示设一个n阶多项式为$S_n(x)$，其表示形式为  \sum^n_{k=1}c_nx^k1 . n维向量c = $(c_0，c_1，\cdots，c_n)$为其系数表示 2 . 将不同的n个值代入多项式$S_n(x)​$，可得到n个不同的结果，向量  (x_0，x_1，\cdots，x_n)，(y_0，y_1，\cdots，y_n) \quad(y_n=\sum^n_{k=1">
   
     <link rel="alternate" href="/atom.xml" title="Alice Blackbarn" type="application/atom+xml">
   
@@ -64,86 +68,101 @@
   </div>
 </div>
 
-        <section id="main">
-  
-  
+        <section id="main"><article id="post-快速傅里叶变换" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/03/14/快速傅里叶变换/" class="article-date">
+  <time class="post-time" datetime="2019-03-14T11:12:26.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">14</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
     
     
-      
-      
-      <section class="archives-wrap animated rubberBand">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      快速傅里叶变换
+    </h1>
+  
+
+        <div>
+          
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Math/">Math</a>
+  </div>
+
+          
+              
+  &nbsp; | &nbsp;
+  <div class="view-box">
+    <span id="/2019/03/14/快速傅里叶变换/" class="leancloud_visitors" data-flag-title="快速傅里叶变换">
+      &nbsp;阅读次数<span class="leancloud-visitors-count"></span>
+    </span>
+  </div>
+
+
+          
         </div>
-        <div class="archives">
+      </header>
     
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2018/09/22/在hexo上添加一个live2d模型/" class="archive-article-date">
-  <time class="post-time" datetime="2018-09-22T03:52:14.000Z" itemprop="datePublished">
-    <span class="post-month">9月</span><br/>
-    <span class="post-day">22</span>
-  </time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/09/22/在hexo上添加一个live2d模型/">在hexo上添加一个live2d模型</a>
-    </h1>
-  
+        <h4 id="0x00-多项式的表示"><a href="#0x00-多项式的表示" class="headerlink" title="0x00 多项式的表示"></a>0x00 多项式的表示</h4><p>设一个n阶多项式为$S_n(x)$，其表示形式为</p>
+<script type="math/tex; mode=display">
+\sum^n_{k=1}c_nx^k</script><p>1 . n维向量c = $(c_0，c_1，\cdots，c_n)$为其<strong>系数表示</strong></p>
+<p>2 . 将不同的n个值代入多项式$S_n(x)​$，可得到n个不同的结果，向量</p>
+<script type="math/tex; mode=display">
+(x_0，x_1，\cdots，x_n)，(y_0，y_1，\cdots，y_n) \quad(y_n=\sum^n_{k=1}c_nx_n^k)</script><p>为其<strong>点值表示</strong></p>
+<a id="more"></a>
+<h4 id="0x01-离散傅里叶变换"><a href="#0x01-离散傅里叶变换" class="headerlink" title="0x01 离散傅里叶变换"></a>0x01 离散傅里叶变换</h4><p>设 $\omega_n=e^{\frac{2\pi i}{n}}$，将$\omega_n^0，\omega_n^1，\cdots，\omega_n^{n-1}$带入$S_n(x)$，得到n维向量</p>
+<script type="math/tex; mode=display">
+a=(S_n(\omega_n^0)，S_n(\omega_n^1)，\cdots，S_n(\omega_n^{n-1}))</script><p>其为系数向量c的离散傅里叶变换</p>
+<h4 id="0x02-快速傅里叶变换"><a href="#0x02-快速傅里叶变换" class="headerlink" title="0x02 快速傅里叶变换"></a>0x02 快速傅里叶变换</h4><script type="math/tex; mode=display">
+\begin{aligned}
+S_n(x)&=(c_1x+c_3x^3+\cdots+c_{n-1}x^{n-1})+(c_2x^2+c_4x^4+\cdots+c_{n}x^{n}) \\&=x(c_1+c_3x^2+\cdots+c_{n-1}x^{n-2})+x^2(c_2+c_4x^2+\cdots+c_nx^{n-2})
+\end{aligned}</script><p>令</p>
+<script type="math/tex; mode=display">
+A(x)=c_1+c_3x+\cdots+c_{n-1}x^{\frac{n}{2}-1}\\B(x)=c_2+c_4x+\cdots+c_nx^{\frac{n}{2}-1}</script><p>有</p>
+<script type="math/tex; mode=display">
+S_n(x)=xA(x^2)+x^2B(x^2)</script><p>设$k&lt;\frac{n}{2}​$</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+S_n(w_n^k)&=w_n^kA(w_n^{2k})+w_n^{2k}B(w_n^{2k})
+\\&=w_n^kA(w_{\frac{n}{2}}^{k})+w_n^{2k}B(w_{\frac{n}{2}}^{k})
+\end{aligned}</script><p>对于$S_n(\omega_n^{k+\frac{n}{2}})​$</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+S_n(w_n^{k+\frac{n}{2}})&=-\omega_n^k A(\omega_n^{2k})+\omega_n^{2k} B(\omega_n^{2k})\\&=-\omega_n^k A(\omega_{\frac{n}{2}}^{k})+\omega_n^{2k} B(\omega_{\frac{n}{2}}^{k})
+\end{aligned}</script><p>分散成了两个规模为原来$\frac{1}{2}$的子问题，复杂度 $T(n)=O(n\log n)​$</p>
+<p><a href="https://oi.men.ci/fft-notes/" target="_blank" rel="noopener">Reference</a></p>
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2018/09/16/vimrc的基础配置/" class="archive-article-date">
-  <time class="post-time" datetime="2018-09-16T07:55:08.000Z" itemprop="datePublished">
-    <span class="post-month">9月</span><br/>
-    <span class="post-day">16</span>
-  </time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/09/16/vimrc的基础配置/">.vimrc的基础配置</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2018/09/16/东方Project-16-5-replay-解析/" class="archive-article-date">
-  <time class="post-time" datetime="2018-09-15T16:00:00.000Z" itemprop="datePublished">
-    <span class="post-month">9月</span><br/>
-    <span class="post-day">16</span>
-  </time>
-</a>
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/03/14/快速傅里叶变换/" data-id="cjt8l26m6000ojgvb2n6py54h" class="article-share-link">分享</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/09/16/东方Project-16-5-replay-解析/">东方Project 16.5 replay文件解析</a>
-    </h1>
-  
-
-    </header>
+      
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/03/13/Partial-Differential-Equation/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">Partial Differential Equation</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
+
 
 
 </section>

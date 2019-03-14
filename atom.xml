@@ -6,10 +6,35 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-03-14T10:58:15.675Z</updated>
+  <updated>2019-03-14T12:05:24.585Z</updated>
   <id>http://yoursite.com/</id>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>快速傅里叶变换</title>
+    <link href="http://yoursite.com/2019/03/14/%E5%BF%AB%E9%80%9F%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/"/>
+    <id>http://yoursite.com/2019/03/14/快速傅里叶变换/</id>
+    <published>2019-03-14T11:12:26.000Z</published>
+    <updated>2019-03-14T12:05:24.585Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="0x00-多项式的表示"><a href="#0x00-多项式的表示" class="headerlink" title="0x00 多项式的表示"></a>0x00 多项式的表示</h4><p>设一个n阶多项式为$S_n(x)$，其表示形式为</p><script type="math/tex; mode=display">\sum^n_{k=1}c_nx^k</script><p>1 . n维向量c = $(c_0，c_1，\cdots，c_n)$为其<strong>系数表示</strong></p><p>2 . 将不同的n个值代入多项式$S_n(x)​$，可得到n个不同的结果，向量</p><script type="math/tex; mode=display">(x_0，x_1，\cdots，x_n)，(y_0，y_1，\cdots，y_n) \quad(y_n=\sum^n_{k=1}c_nx_n^k)</script><p>为其<strong>点值表示</strong></p><a id="more"></a><h4 id="0x01-离散傅里叶变换"><a href="#0x01-离散傅里叶变换" class="headerlink" title="0x01 离散傅里叶变换"></a>0x01 离散傅里叶变换</h4><p>设 $\omega_n=e^{\frac{2\pi i}{n}}$，将$\omega_n^0，\omega_n^1，\cdots，\omega_n^{n-1}$带入$S_n(x)$，得到n维向量</p><script type="math/tex; mode=display">a=(S_n(\omega_n^0)，S_n(\omega_n^1)，\cdots，S_n(\omega_n^{n-1}))</script><p>其为系数向量c的离散傅里叶变换</p><h4 id="0x02-快速傅里叶变换"><a href="#0x02-快速傅里叶变换" class="headerlink" title="0x02 快速傅里叶变换"></a>0x02 快速傅里叶变换</h4><script type="math/tex; mode=display">\begin{aligned}S_n(x)&=(c_1x+c_3x^3+\cdots+c_{n-1}x^{n-1})+(c_2x^2+c_4x^4+\cdots+c_{n}x^{n}) \\&=x(c_1+c_3x^2+\cdots+c_{n-1}x^{n-2})+x^2(c_2+c_4x^2+\cdots+c_nx^{n-2})\end{aligned}</script><p>令</p><script type="math/tex; mode=display">A(x)=c_1+c_3x+\cdots+c_{n-1}x^{\frac{n}{2}-1}\\B(x)=c_2+c_4x+\cdots+c_nx^{\frac{n}{2}-1}</script><p>有</p><script type="math/tex; mode=display">S_n(x)=xA(x^2)+x^2B(x^2)</script><p>设$k&lt;\frac{n}{2}​$</p><script type="math/tex; mode=display">\begin{aligned}S_n(w_n^k)&=w_n^kA(w_n^{2k})+w_n^{2k}B(w_n^{2k})\\&=w_n^kA(w_{\frac{n}{2}}^{k})+w_n^{2k}B(w_{\frac{n}{2}}^{k})\end{aligned}</script><p>对于$S_n(\omega_n^{k+\frac{n}{2}})​$</p><script type="math/tex; mode=display">\begin{aligned}S_n(w_n^{k+\frac{n}{2}})&=-\omega_n^k A(\omega_n^{2k})+\omega_n^{2k} B(\omega_n^{2k})\\&=-\omega_n^k A(\omega_{\frac{n}{2}}^{k})+\omega_n^{2k} B(\omega_{\frac{n}{2}}^{k})\end{aligned}</script><p>分散成了两个规模为原来$\frac{1}{2}$的子问题，复杂度 $T(n)=O(n\log n)​$</p><p><a href="https://oi.men.ci/fft-notes/" target="_blank" rel="noopener">Reference</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h4 id=&quot;0x00-多项式的表示&quot;&gt;&lt;a href=&quot;#0x00-多项式的表示&quot; class=&quot;headerlink&quot; title=&quot;0x00 多项式的表示&quot;&gt;&lt;/a&gt;0x00 多项式的表示&lt;/h4&gt;&lt;p&gt;设一个n阶多项式为$S_n(x)$，其表示形式为&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;
+\sum^n_{k=1}c_nx^k&lt;/script&gt;&lt;p&gt;1 . n维向量c = $(c_0，c_1，\cdots，c_n)$为其&lt;strong&gt;系数表示&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;2 . 将不同的n个值代入多项式$S_n(x)​$，可得到n个不同的结果，向量&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;
+(x_0，x_1，\cdots，x_n)，(y_0，y_1，\cdots，y_n) \quad(y_n=\sum^n_{k=1}c_nx_n^k)&lt;/script&gt;&lt;p&gt;为其&lt;strong&gt;点值表示&lt;/strong&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Math" scheme="http://yoursite.com/categories/Math/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>Partial Differential Equation</title>

@@ -38,7 +38,7 @@
     <h2 class="author"></h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>12</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>13</strong><br>文章</div></a>
       <a href="/categories"><div><strong>5</strong><br>分类</div></a>
       <a href="/tags"><div><strong>1</strong><br>标签</div></a>
     </div>
@@ -65,6 +65,76 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-在hexo上添加一个live2d模型" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/22/在hexo上添加一个live2d模型/" class="article-date">
+  <time class="post-time" datetime="2018-09-22T03:52:14.000Z" itemprop="datePublished">
+    <span class="post-month">9月</span><br/>
+    <span class="post-day">22</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/22/在hexo上添加一个live2d模型/">在hexo上添加一个live2d模型</a>
+    </h1>
+  
+
+        <div>
+          
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/存档/">存档</a>
+  </div>
+
+          
+              
+  &nbsp; | &nbsp;
+  <div class="view-box">
+    <span id="/2018/09/22/在hexo上添加一个live2d模型/" class="leancloud_visitors" data-flag-title="在hexo上添加一个live2d模型">
+      &nbsp;阅读次数<span class="leancloud-visitors-count"></span>
+    </span>
+  </div>
+
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="首先在主目录下安装插件"><a href="#首先在主目录下安装插件" class="headerlink" title="首先在主目录下安装插件"></a>首先在主目录下安装插件</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save hexo-helper-live2d</span><br></pre></td></tr></table></figure>
+<h4 id="然后可以用这条命令下载live2d模型"><a href="#然后可以用这条命令下载live2d模型" class="headerlink" title="然后可以用这条命令下载live2d模型"></a>然后可以用这条命令下载live2d模型</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install live2d-widget-model-z16</span><br></pre></td></tr></table></figure>
+<h4 id="install后面的是模型的名字，可以在这里找到所有的模型示范，找到喜欢的就根据上面的命令，把z16替换成你选择的模型就可以了"><a href="#install后面的是模型的名字，可以在这里找到所有的模型示范，找到喜欢的就根据上面的命令，把z16替换成你选择的模型就可以了" class="headerlink" title="install后面的是模型的名字，可以在这里找到所有的模型示范，找到喜欢的就根据上面的命令，把z16替换成你选择的模型就可以了"></a>install后面的是模型的名字，可以在<a href="https://huaji8.top/post/live2d-plugin-2.0/" target="_blank" rel="noopener">这里</a>找到所有的模型示范，找到喜欢的就根据上面的命令，把z16替换成你选择的模型就可以了</h4><hr>
+<h4 id="接下来是修改主目录下的-config-yml，在最后添加如下内容"><a href="#接下来是修改主目录下的-config-yml，在最后添加如下内容" class="headerlink" title="接下来是修改主目录下的_config.yml，在最后添加如下内容"></a>接下来是修改主目录下的_config.yml，在最后添加如下内容</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">live2d:</span><br><span class="line">  enable: <span class="literal">true</span></span><br><span class="line">  scriptFrom: local</span><br><span class="line">  pluginRootPath: live2dw/</span><br><span class="line">  pluginJsPath: lib/</span><br><span class="line">  pluginModelPath: assets/</span><br><span class="line">  tagMode: <span class="literal">false</span></span><br><span class="line">  debug: <span class="literal">false</span></span><br><span class="line">  model:</span><br><span class="line">    use: live2d-widget-model-z16</span><br><span class="line">  display:</span><br><span class="line">    position: right</span><br><span class="line">    width: <span class="number">150</span></span><br><span class="line">    height: <span class="number">300</span></span><br><span class="line">  mobile:</span><br><span class="line">    show: <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<h4 id="然后部署到服务器上"><a href="#然后部署到服务器上" class="headerlink" title="然后部署到服务器上"></a>然后部署到服务器上</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo s</span><br></pre></td></tr></table></figure>
+<h4 id="就可以在博客上看到看板娘了"><a href="#就可以在博客上看到看板娘了" class="headerlink" title="就可以在博客上看到看板娘了"></a>就可以在博客上看到看板娘了</h4><h4 id="我的live2d是用原来的某个资源包用药水制作师的相关资源替换得到的，具体方法还有点迷"><a href="#我的live2d是用原来的某个资源包用药水制作师的相关资源替换得到的，具体方法还有点迷" class="headerlink" title="我的live2d是用原来的某个资源包用药水制作师的相关资源替换得到的，具体方法还有点迷"></a>我的live2d是用原来的某个资源包用<a href="http://www.zizi.world/src/live2d/Potion-Maker.zip" target="_blank" rel="noopener">药水制作师</a>的相关资源替换得到的，具体方法还有点迷</h4><h4 id="然后"><a href="#然后" class="headerlink" title="然后"></a>然后</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+<h4 id="就大功告成了"><a href="#就大功告成了" class="headerlink" title="就大功告成了"></a>就大功告成了</h4>
+        
+          <p class="article-more-link">
+            <a href="/2018/09/22/在hexo上添加一个live2d模型/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/09/22/在hexo上添加一个live2d模型/" data-id="cjt8l26m8000qjgvbwib3tnfs" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-vimrc的基础配置" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -118,7 +188,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/16/vimrc的基础配置/" data-id="cjt8isq1h000dykvb9oeksd4j" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2018/09/16/vimrc的基础配置/" data-id="cjt8l26m3000ljgvb2mauzey1" class="article-share-link">分享</a>
       
       
     </footer>
@@ -183,7 +253,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/16/东方Project-16-5-replay-解析/" data-id="cjt8isq1t000lykvbpi3ek02a" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2018/09/16/东方Project-16-5-replay-解析/" data-id="cjt8l26m1000jjgvbira61om6" class="article-share-link">分享</a>
       
       
     </footer>
@@ -239,7 +309,7 @@
     <h2 class="author"></h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>12</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>13</strong><br>文章</div></a>
       <a href="/categories"><div><strong>5</strong><br>分类</div></a>
       <a href="/tags"><div><strong>1</strong><br>标签</div></a>
     </div>
