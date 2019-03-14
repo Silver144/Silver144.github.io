@@ -12,7 +12,7 @@
 <meta property="og:site_name" content="Alice Blackbarn">
 <meta property="og:description" content="MathJax.Hub.Config({tex2jax: {inlineMath: [[&apos;$&apos;,&apos;$&apos;], [&apos;\\(&apos;,&apos;\\)&apos;]]}});   Day 0了解基本信息 1 . 此书所述的操作系统是用C语言和汇编写成的 2 . 此书的操作环境为Windows 3 . 步骤为，编写源代码-&amp;gt;编译成机器语言-&amp;gt;生成软盘镜像文件-&amp;gt;写入磁盘并作成启动盘 4 . 阶段性计划">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-12T13:51:26.510Z">
+<meta property="og:updated_time" content="2019-03-14T08:44:21.691Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="30天自制os">
 <meta name="twitter:description" content="MathJax.Hub.Config({tex2jax: {inlineMath: [[&apos;$&apos;,&apos;$&apos;], [&apos;\\(&apos;,&apos;\\)&apos;]]}});   Day 0了解基本信息 1 . 此书所述的操作系统是用C语言和汇编写成的 2 . 此书的操作环境为Windows 3 . 步骤为，编写源代码-&amp;gt;编译成机器语言-&amp;gt;生成软盘镜像文件-&amp;gt;写入磁盘并作成启动盘 4 . 阶段性计划">
@@ -203,11 +203,34 @@
 <p>后面的代码就是先对bootpack.hrb中部分内容进行传送，等到没有要传送的数据的时候，从0x28001b执行bootpack.hrb</p>
 <p>接下来的作用就是将0x60端口的冗余数据清理出来，紧接着是memcpy程序，单位为4字节，asmhead.nas的最后则是定义GDT0和GDTR0，并对齐至16字节，通过代码看出，GDT0规定的<strong>可读写段从0x00000000开始，界限为0xfffff，可执行段从0x00280000开始，界限为0x7ffff</strong></p>
 <p>最后在HariMain()中创建GDT和IDT后，初始化PIC，打开中断并进行相关设备的初始化就可以处理中断了，至此，工作已经结束，其中部分问题会在以后解释</p>
+<h3 id="Day-9"><a href="#Day-9" class="headerlink" title="Day 9"></a><strong>Day 9</strong></h3><p>今天的第一个任务是进行内存容量检查</p>
+<p>1 . 测试cpu是否为486及以上，若是，则关闭高速缓存</p>
+<p>2 . 开始测试内存，一开始向内存中写入一个值，然后反转，测试是否相等，若相等，则再次反转测试是否相等，若仍相等，则此内存有效</p>
+<p>3 . 测试时注意编译器的优化问题导致程序失效</p>
+<p>第二个任务是管理内存，以128M的内存为例</p>
+<p>1 . 比较简单的方法是将128MB的内存划分为32768个4KB大小的区域，然后设置一个大小为32768的数组，来标记哪些块目前为可用。</p>
+<p>2 . 也可以使用结构体列表的思路，将空闲地址基址与大小写入结构体数组，然后需要时数组轮询即可得到需要的资源，这样占用的内存也少</p>
+<p>3 . 在使用结构体的策略时，可以将零散的小空闲内存合并为大的整块空闲内存，这样既节省空间，也减少程序轮询的次数</p>
+<p>4 . 归还内存时首先测试是否能与前一块的内存区域合并成一块更大的空闲内存，若可以则合并，然后测试能否与后一块内存区域合并，若可以则合并，若均不可以，则加一块描述符用于描述新释放的内存</p>
+<p>若只在HariMain()函数分配0x00001000~0x0009e000与0x00400000~0x00500000，则可用内存加起来仅有5752KB</p>
+<h3 id="Day-10"><a href="#Day-10" class="headerlink" title="Day 10"></a><strong>Day 10</strong></h3><p>今天首先继续进行内存管理</p>
+<p>1 . 把内存分配和释放的最小单位为4KB，这样有助于管理，而且不会产生大量的不连续的小内存段</p>
+<p>2 . i = (i + 0xfff) \&amp; 0xffffff000 的意思与 x = ((x + 99) / 100) $\times$100的意思差不多，前者是为了将第四位向上取整，后者是百位向上取整</p>
+<p>接下来是实现叠加窗口，这个需要不断地重新绘制才能达到目的</p>
+<p>1 . 首先创建一个图层结构体，用于存储每一个图层的信息(坐标、大小、每一个像素的值、高度等，我理解的高度为图层的优先显示程度)</p>
+<p>2 . 若要切换窗口，只需要修改某个图层的高度，然后调整其他图层的高度</p>
+<p>3 . 在刷新函数中，使用的策略为从图层0到图层top，逐个在vram里面写入，达到覆盖的效果，但是由于写入的次数过多，故会产生卡顿</p>
+<p>4 . 里面的背景色号为判断图层的这一处是否应该覆盖，若为背景色，则此处保留上一个图层的颜色，而颜色编号为0~15，故背景色设为99</p>
+<p>5 . 每产生一次鼠标中断，屏幕会刷新一次，这样，鼠标就能运动起来</p>
+<p>由于之前的函数写入次数过多，故接下来进行一些改进</p>
+<p>1 . 仅仅设置移动区域进行重写，其他区域保持不动，这样工作量确实少了一些，但是并不明显</p>
+<p>2 . 虽然其他区域保持不动，但是还是要进行大量的if判断，浪费了时间，因此，需要改动循环的范围，原来在其图层上每个点都遍历，现在仅在移动的区域进行遍历，减少了循环的次数，从而也大大降低了工作量，比之前的更加流畅</p>
+<p>至此，图层覆盖的问题也能够解决了</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/09/30天自制os/" data-id="cjt874024000c90vb5h5tsd6t" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/03/09/30天自制os/" data-id="cjt8e0gtz0000sgvb53hhay6n" class="article-share-link">分享</a>
       
       
     </footer>
@@ -470,6 +493,6 @@ new WOW().init();
             all[i].SourceElement().parentNode.className += ' has-jax';
     });
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/z16.model.json"},"display":{"position":"left","width":150,"height":300},"mobile":{"show":true},"log":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/z16.model.json"},"display":{"position":"left","width":150,"height":300},"mobile":{"show":true},"log":false});</script></body>
 </html>
