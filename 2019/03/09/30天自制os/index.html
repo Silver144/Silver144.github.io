@@ -12,7 +12,7 @@
 <meta property="og:site_name" content="Alice Blackbarn">
 <meta property="og:description" content="MathJax.Hub.Config({tex2jax: {inlineMath: [[&apos;$&apos;,&apos;$&apos;], [&apos;\\(&apos;,&apos;\\)&apos;]]}});   Day 0了解基本信息 1 . 此书所述的操作系统是用C语言和汇编写成的 2 . 此书的操作环境为Windows 3 . 步骤为，编写源代码-&amp;gt;编译成机器语言-&amp;gt;生成软盘镜像文件-&amp;gt;写入磁盘并作成启动盘 4 . 阶段性计划">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-14T08:50:27.165Z">
+<meta property="og:updated_time" content="2019-03-17T11:25:53.549Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="30天自制os">
 <meta name="twitter:description" content="MathJax.Hub.Config({tex2jax: {inlineMath: [[&apos;$&apos;,&apos;$&apos;], [&apos;\\(&apos;,&apos;\\)&apos;]]}});   Day 0了解基本信息 1 . 此书所述的操作系统是用C语言和汇编写成的 2 . 此书的操作环境为Windows 3 . 步骤为，编写源代码-&amp;gt;编译成机器语言-&amp;gt;生成软盘镜像文件-&amp;gt;写入磁盘并作成启动盘 4 . 阶段性计划">
@@ -226,11 +226,28 @@
 <p>1 . 仅仅设置移动区域进行重写，其他区域保持不动，这样工作量确实少了一些，但是并不明显</p>
 <p>2 . 虽然其他区域保持不动，但是还是要进行大量的if判断，浪费了时间，因此，需要改动循环的范围，原来在其图层上每个点都遍历，现在仅在移动的区域进行遍历，减少了循环的次数，从而也大大降低了工作量，比之前的更加流畅</p>
 <p>至此，图层覆盖的问题也能够解决了</p>
+<h3 id="Day-11"><a href="#Day-11" class="headerlink" title="Day 11"></a><strong>Day 11</strong></h3><p>今天的首要事情是支持鼠标能够真正实现全屏幕覆盖，这个问题比较简单，进行如下修改:</p>
+<p>a. 仅满足左上角的点可以位于频幕</p>
+<p>b .仅仅刷新鼠标矩形与整个窗口重叠的地方</p>
+<p>这样鼠标就可以实现全屏幕覆盖而且在窗口外可以隐藏一部分了</p>
+<p>接下来就是做窗口了，大体思路是要先初始化一个图层，并绘制上相应的东西，做了如下操作：</p>
+<p>1 . 绘制关闭按钮，与鼠标的绘制有相似之处</p>
+<p>2 . 创建窗口图层并设置相应的缓冲区，申请内存</p>
+<p>3 . 在窗口的缓冲区(buf_win)中写入字符</p>
+<p>4 . 调整窗口出现的位置并设置优先级(鼠标最上，vram最下)，然后显示</p>
+<p>成功显示</p>
+<p>接下来是进行的一个小应用，令计数器无限计数并使用窗口显示，这个只需要修改循环中的代码就可以了，这里我将sprintf中的参数counter改为counter / 1000，可见的速率减慢为原来的1 / 1000</p>
+<p>很明显这里有闪烁的迹象，原因是每次循环都是先刷新整个界面，然后是窗口，最后是鼠标，在刷新整个界面的时候就会看到相应的地方在闪烁(仅数字地方刷新是因为上一天的优化策略)，于是，将刷新函数修改为仅让想刷新的图层及以上刷新</p>
+<p>闪烁现象消失了(截图看不出任何现象)</p>
+<p>但是还是会有一个问题：鼠标的优先级比窗口要高，鼠标放在上面的时候依然会闪烁，于是，需要一种新的刷新方法，大体思路如下</p>
+<p>1 . 创立buf_map，使得屏幕上每一个像素对应一个标记，这个标记与每一个图层是一一对应的</p>
+<p>2 . 于是，从底层图层往高层图层刷新的时候，若某层某处在刷新区内，但是此处在map中的标记为更高级的图层，则并不会将颜色写入内存</p>
+<p>这样的话，刷新时鼠标不会闪烁，性能的话，虽然每次刷新前需要刷新map可能会有额外的开销，但是当重叠区域过多时，写内存的开销会极大，此时刷新map可去除这些开销，综合下来性能有所提高</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/09/30天自制os/" data-id="cjt8l26l80000jgvbn0r6yxvn" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/03/09/30天自制os/" data-id="cjtcu3qdu00020ovbx3yeocjk" class="article-share-link">分享</a>
       
       
     </footer>
