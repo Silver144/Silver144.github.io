@@ -12,7 +12,7 @@
 <meta property="og:site_name" content="Alice Blackbarn">
 <meta property="og:description" content="MathJax.Hub.Config({tex2jax: {inlineMath: [[&apos;$&apos;,&apos;$&apos;], [&apos;\\(&apos;,&apos;\\)&apos;]]}});   Day 0了解基本信息 1 . 此书所述的操作系统是用C语言和汇编写成的 2 . 此书的操作环境为Windows 3 . 步骤为，编写源代码-&amp;gt;编译成机器语言-&amp;gt;生成软盘镜像文件-&amp;gt;写入磁盘并作成启动盘 4 . 阶段性计划">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-17T11:25:53.549Z">
+<meta property="og:updated_time" content="2019-03-24T12:22:20.552Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="30天自制os">
 <meta name="twitter:description" content="MathJax.Hub.Config({tex2jax: {inlineMath: [[&apos;$&apos;,&apos;$&apos;], [&apos;\\(&apos;,&apos;\\)&apos;]]}});   Day 0了解基本信息 1 . 此书所述的操作系统是用C语言和汇编写成的 2 . 此书的操作环境为Windows 3 . 步骤为，编写源代码-&amp;gt;编译成机器语言-&amp;gt;生成软盘镜像文件-&amp;gt;写入磁盘并作成启动盘 4 . 阶段性计划">
@@ -243,11 +243,53 @@
 <p>1 . 创立buf_map，使得屏幕上每一个像素对应一个标记，这个标记与每一个图层是一一对应的</p>
 <p>2 . 于是，从底层图层往高层图层刷新的时候，若某层某处在刷新区内，但是此处在map中的标记为更高级的图层，则并不会将颜色写入内存</p>
 <p>这样的话，刷新时鼠标不会闪烁，性能的话，虽然每次刷新前需要刷新map可能会有额外的开销，但是当重叠区域过多时，写内存的开销会极大，此时刷新map可去除这些开销，综合下来性能有所提高</p>
+<h3 id="Day-12"><a href="#Day-12" class="headerlink" title="Day 12"></a><strong>Day 12</strong></h3><p>今天首先需要给操作系统添加定时器</p>
+<p>1 . 这个功能由IRQ0提供，可以通过设定PIT来控制中断产生的频率，通过资料可知，PIT脉冲的频率为1193180Hz，所以若把周期设为11392，中断频率就为100Hz</p>
+<p>2 . 通过往0x43端口写入0x34，就可以对中断周期进行调整，先往0x40端口写入周期低8位，再往0x40端口写入周期高8位，对周期的修改就完成了</p>
+<p>3 . 然后在主函数中将IMR的0位设置为0，就可以按设置的频率发生时钟中断了</p>
+<p>4 . 最后编写中断处理函数，并在IDT中注册，准备工作就全部完成了</p>
+<p>定时器可以很方便地管理程序，一段固定时间结束后就会执行某个任务，举例，经过5s后就输出”5 sec”的字样</p>
+<p>1 . 首先设置一个结构体，里面含有经过时间，剩余时间，一个缓冲区和数据，当剩余时间归零的时候，数据便会打向缓冲区</p>
+<p>2 . 主函数中设置为，若缓冲区有数据，则直接往屏幕打入”5 sec”</p>
+<p>测试成功</p>
+<p>为了能使用多个超时定时器，需要设置一个超时定时器结构体数组来进行管理，按顺序初始化并分配缓冲区内存后，只需要编写对应定时器超时后的活动，就可以在不同的程序中使用了，比如</p>
+<p>3s的定时器超时后显示3s，10s的定时器超时后显示10s，光标定时器每隔0.5s显示一次(多次重置定时器)</p>
+<p>接下来对此进行优化</p>
+<p>1 . 第一个优化的点是在中断处理函数消除timeout的自减，只与count进行比较，意义也变为超时的时刻</p>
+<p>2 . 第二个优化的点在于并不需要时刻监督是否超时，因为只需要设定好下一次超时的时刻就能进行活动，于是设置下一个超时点，不到则不操作缓冲区</p>
+<p>3 . 第三个优化的点在于尽快找到超时的定时器，只需要对初始超时时刻进行排序，若有N个超时的定时器，则后面未超时的直接覆盖前面的N个，下一次超时时间就是第0个定时器的超时时间</p>
+<h3 id="Day-13"><a href="#Day-13" class="headerlink" title="Day 13"></a><strong>Day 13</strong></h3><p>由于目前新开一个定时器就需要新开一个缓冲区，故今天的首要任务是将FIFO缓冲区进行整理，方法是在同一个缓冲区内写入不同的数来确定超时的定时器</p>
+<p>ps: 可能会有人认为有相同时刻完成任务的情况下会遗漏信息，但其实不会，因为那个结构体中存储定时器的数组仅当某个定时器完成任务才会移除它，但也有风险，可能会造成逻辑错误</p>
+<p>这样性能确实得到了改善，受此启发，其实也可以将鼠标和键盘也归入一个缓冲区，具体策略同上，方案如下</p>
+<p>1 . 0~1设为光标闪烁的定时器</p>
+<p>2 . 3和10分别用作3s与10s的定时器</p>
+<p>3 . 256~511标识键盘输入</p>
+<p>4 . 512~767标识鼠标输入</p>
+<p>这样，每次在缓冲区中获得一个数，系统能够判断来源，并进行相应的处理</p>
+<p>接下来继续对中断处理进行优化，这一次优化的地方在于上一天的移位操作</p>
+<p>1 . 在前一天的模型中，当一个定时器超时后，后面的所有运行的定时器向数组前面移动，实际上，我们可以使用链表根据超时时刻来将定时器进行排序，这样的话，就不需要移位</p>
+<p>2 . 这样不仅省去了移位的功夫，而且去掉了定时器指针数组，因为所有的定时器用链表串起来，只需要链表头而已</p>
+<p>接下来为了进一步减少中断处理函数运行时间以及精简代码，引入哨兵机制，具体的思想如下</p>
+<p>哨兵作为永远存在的定时器，其绝对不会出链表，在原来的timer_settime函数中，需要判断四种情况，然而由于哨兵的出现，作为第一个定时器插入和插入队列最后一个的情况不会出现，前者变成了插入队首中的一种情况，后者变为插入两个定时器之间的一种情况</p>
+<p>其实这个主要是简化了timer_setting的写法，对于中断处理函数优化为少判断一个if语句，变化不大</p>
+<h3 id="Day-14"><a href="#Day-14" class="headerlink" title="Day 14"></a><strong>Day 14</strong></h3><p>今天开始的任务是提高分辨率，之前的分辨率仅为320$\times$200$\times$8bit，现在可以提高到640$\times$400$\times$8bit甚至1024$\times$768$\times$8bit</p>
+<p>1 . 必须使用VBE才能切换到这些画面模式，首先需要确定机体是否含有VBE，给es赋值0x9000，di赋值0(es和di的作用是提供缓冲区)，ax赋值0x4f00，再执行int 0x10中断，若机体含VBE，则ax的值会变为0x004f</p>
+<p>2 . 需要确定VBE版本，若不是2.0以上，则不能使用高分辨率，将地址为[es:di + 4]的16位数与0x0200进行比较，若小于，则只能使用320$\times$200$\times$8bit</p>
+<p>3 . 查看需要的画面模式是否可用，首先将此画面模式对应的号码写入cx，将ax置为0x4f01，然后执行int 0x10，若ax为0x004f，则可用</p>
+<p>4 . 确认颜色数是否为8，是否为调色板模式，画面模式号码可否加上0x4000，这些均可以与写入缓冲区的数进行比对，全部符合就可以设置了</p>
+<p>5 . 切换到VBE画面模式时，需要设置ax寄存器为0x4f02，bx寄存器为画面模式对应的号码，实际上，要将画面模式号码加上0x4000才能顺利运行</p>
+<p>之前在处理键盘中断的时候，屏幕上仅仅只是显示了接收的键值，不过进行一些处理后就可以将其转化为对应的字母</p>
+<p>1 . 根据键值对应字符的关系，设置一个字符表，一一对应键值与字符，不可见字符或保留键值设置为0</p>
+<p>2 . 函数体中，只需要以键值为索引，然后选择字符并打印出来即可</p>
+<p>3 . 要想达到持续输入和退格的效果，只需要在显示输入字符后，将光标的横坐标加一个字符的距离，在按退格时，只需覆盖之前的光标图案，删除的文字自动会被光标覆盖</p>
+<p>接下来是实现鼠标拖动窗口，实际上这并不完善，因为他实现的方式是只要鼠标一点，窗口就会移动到相对于鼠标固定的一个位置，对于这个，我的解决方案如下</p>
+<p>1 . 直接使用第11天为了消除闪烁所引进的map，查看鼠标顶点向上一个像素的坐标对应的图层号，若图层为桌面则跳过，若为窗口则拖动对应的图层</p>
+<p>2 . 现阶段考虑到效率，拖动时可以将直接图层移动到相对鼠标固定的一个位置</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/09/30天自制os/" data-id="cjtcu3qdu00020ovbx3yeocjk" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/03/09/30天自制os/" data-id="cjtmw7i5u0000ecvbt94l6657" class="article-share-link">分享</a>
       
       
     </footer>
@@ -510,6 +552,6 @@ new WOW().init();
             all[i].SourceElement().parentNode.className += ' has-jax';
     });
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/z16.model.json"},"display":{"position":"left","width":150,"height":300},"mobile":{"show":true},"log":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/z16.model.json"},"display":{"position":"left","width":150,"height":300},"mobile":{"show":true},"log":false});</script></body>
 </html>
