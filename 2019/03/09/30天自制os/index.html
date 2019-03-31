@@ -12,7 +12,7 @@
 <meta property="og:site_name" content="Alice Blackbarn">
 <meta property="og:description" content="MathJax.Hub.Config({tex2jax: {inlineMath: [[&apos;$&apos;,&apos;$&apos;], [&apos;\\(&apos;,&apos;\\)&apos;]]}});   Day 0了解基本信息 1 . 此书所述的操作系统是用C语言和汇编写成的 2 . 此书的操作环境为Windows 3 . 步骤为，编写源代码-&amp;gt;编译成机器语言-&amp;gt;生成软盘镜像文件-&amp;gt;写入磁盘并作成启动盘 4 . 阶段性计划">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-24T12:22:20.552Z">
+<meta property="og:updated_time" content="2019-03-31T10:07:50.327Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="30天自制os">
 <meta name="twitter:description" content="MathJax.Hub.Config({tex2jax: {inlineMath: [[&apos;$&apos;,&apos;$&apos;], [&apos;\\(&apos;,&apos;\\)&apos;]]}});   Day 0了解基本信息 1 . 此书所述的操作系统是用C语言和汇编写成的 2 . 此书的操作环境为Windows 3 . 步骤为，编写源代码-&amp;gt;编译成机器语言-&amp;gt;生成软盘镜像文件-&amp;gt;写入磁盘并作成启动盘 4 . 阶段性计划">
@@ -285,11 +285,58 @@
 <p>接下来是实现鼠标拖动窗口，实际上这并不完善，因为他实现的方式是只要鼠标一点，窗口就会移动到相对于鼠标固定的一个位置，对于这个，我的解决方案如下</p>
 <p>1 . 直接使用第11天为了消除闪烁所引进的map，查看鼠标顶点向上一个像素的坐标对应的图层号，若图层为桌面则跳过，若为窗口则拖动对应的图层</p>
 <p>2 . 现阶段考虑到效率，拖动时可以将直接图层移动到相对鼠标固定的一个位置</p>
+<h3 id="Day-15"><a href="#Day-15" class="headerlink" title="Day 15"></a><strong>Day 15</strong></h3><p>多任务：执行多个任务的时候，CPU在很短的时间内进行任务切换，由于一般切换时间较短，所以看起来就像多个任务同时在运行</p>
+<p>为了实现这种任务切换，在切换时，系统要保存这个任务的一些信息，包括各特权级堆栈段、寄存器状态等，在载入下一个任务前，需要将下一个任务的信息还原，这样才能保证不会出现相关错误，因此，需要一个结构体(TSS)来存储这些信息</p>
+<p>TSS包括寄存器保存区域、内层堆栈指针区域、地址映射寄存器区域、链接字段以及其他字段，TSS是内存段的一种，需要在GDT中定义后再使用，在这里，暂时先将ldtr置为0(系统中并未设置LDT)，iomap置为0x40000000，接下来进行一次两个任务间的切换</p>
+<p>1 . 创建两个TSS，ldtr置0，iomap置0x40000000，在GDT里注册</p>
+<p>2 . TR是任务寄存器，若一个任务要占用CPU，其TSS在GDT中的号码乘以3的值要写入TR，在汇编代码中设置好相关函数</p>
+<p>3 . 首先是任务a切换至任务b，先准备好任务b的TSS，设置eip为task_b_main字段开头，esp为task_b_esp(需要手动新开辟一块内存)，并设置其他有关寄存器(EFLAG中要设置为可中断)</p>
+<p>4 . 本次设置为10s计时器超时后就进行任务切换(直接在任务a的代码中写入切换进任务b的函数，之后有专门的程序进行管理)，hlt()不太明显，写上相关的文字可能会更加直观</p>
+<p>测试成功</p>
+<p>接下来在任务b中加入5s后切换回任务a的代码，与HariMain()函数中的代码相似，注册一个超时时间为5s的定时器，不断使用时钟中断唤醒CPU并查询是否超时，若是，则返回任务a，进一步，缩短切换的时长，并让task_b能够直观显示运行时长</p>
+<p>为了实现更多任务的相互切换，首先需要精简task_switch()函数，使得任务号能通过参数传递，在这里有一个要点，对于一个任务的栈来说，esp指向其栈顶，在作者的代码中，将[esp+4]的值设为sht_back，那么esp的值需要为申请内存的上界减8，具体可以看下面的图</p>
+<p>接下来要为多任务设置一个管理的程序，之前的多任务是在一个任务中主动切换到另一个任务，然而理想的多任务则是有一个专门来管理多任务的程序</p>
+<p>1 . 主体逻辑为设置定时器，等定时器超时后自动切换任务，因此函数需要设定定时器和切换任务的功能</p>
+<p>2 . 在IRQ0的中断处理函数中调用切换任务的函数，每一次时钟中断中查看mt_timer是否超时，若是，则调用任务切换函数</p>
+<p>3 . 不能在中途调用任务切换函数，因为这样会导致这一个中断处理函数未结束时将中断标志位设置为1，从而可能引发另一个中断，导致错误</p>
+<h3 id="Day-16"><a href="#Day-16" class="headerlink" title="Day 16"></a><strong>Day 16</strong></h3><p>为了让多个任务能够自动化管理，需要创建一个结构体(TASK)进行存储任务的各种信息(包括TSS、状态、编号)，然后将所有的任务结构体结合到一起，并加上调度信息(任务数、当前运行任务的编号)合成一个新的结构体(taskctl)，这样任务的状态就一目了然，调度也更方便，接下来，设置4个函数</p>
+<p>1 . task_init()，作用是为taskctl申请内存，并把所有任务的TSS在GDT中注册，然后设置第一个运行的任务，并对定时器进行初始化，设定一个切换任务的时长</p>
+<p>2 . task_alloc()，这个函数的作用并不是为TASK申请内存，而是初始化第一个未使用任务的TSS，并把状态设置为正在使用</p>
+<p>3 . task_run()，这个函数的作用是将task加到队列末尾，并设置相关信息</p>
+<p>4 . task_switch()，作用是设置此任务的时间片，每到时间片过期，IRQ0的中断处理函数就会调用此函数，运行队列中的下一个程序，若只有一个程序则不进行切换，若这个任务是队列的最后一个任务，则下次运行第一个任务</p>
+<p>由于系统中有的任务需要更多的时间，有的任务并不需要那么多时间，因此，加入休眠功能，使得工作量少的任务可以将多余的时间给下一个任务，具体操作为首先找到其队列中的位置，让所有在它后面的任务向前移动一个位置，并设置相关信息，若这个任务正在运行，则进行任务切换</p>
+<p>ps: 当任务过多的时候这个移位操作会很费时间，应该在TASK结构体中加一个next指针指向下一个任务，这样可以缩短时间</p>
+<p>任务唤醒可以有多种形式，比如任务在等待键盘输入，这种情况下可以设置为当fifo缓冲区不为空的时候将任务唤醒，书上在fifo中添加了一个task指针，可以指定一个任务在fifo缓冲区不为空的时候被唤醒，这里可以改成添加一个指针头，当fifo不为空的时候唤醒这个头牵引的任务队列，而且有时候并不是所有的数据都要唤醒任务，若是在等待键盘，则只需要设置缓冲区数据为键盘对应的值时唤醒即可</p>
+<p>这里可以测试一下刚刚的多任务程序，设定4个任务分别代表4个窗口，其中三个窗口进行计数，一个供键盘输入，这里的三个任务共用task_b_main()函数进行计数，每隔1s显示一次，任务a设置为fifo缓冲区中有数据就被唤醒</p>
+<p>测试成功</p>
+<p>接下来设定任务的优先级，实际上，这里的优先级只是时间片长短的差异，标准优先级为默认时间片，这里设置为优先级值越高，时间片越长，在TASK结构体添加此属性，修改task_init()函数和task_switch()函数，使得任务可以根据优先级设置定时器，修改task_run()函数，使得任务可以自由设定优先级，在这里，设定三个定时器的优先级分别为1，2，3进行测试</p>
+<p>实际运行情况接近理论值</p>
+<p>接下来引进优先级的另一个机制，创建不同优先级的队列，将所有任务分配到不同优先级的队列，当且仅当高优先级队列无任何任务时，低优先级队列中的任务才可以运行，因此，需要引入一些结构体和表示量，而且逻辑也要进行相应的改变</p>
+<p>1 . 将任务添加到任务队列的时候，需要设定level，若一个任务本来就是活跃的，则先需要将其从原来的level队列中删除，重新添加到任务队列尾部，然后设定level再将其添加到对应的level队列中</p>
+<p>2 . 任务切换时，首先要根据level[i].running属性找到最高优先级队列，然后按队列中任务的顺序进行切换</p>
+<p>此时，创建任务或添加任务的时候加上level参数，就可以只运行最高优先级队列中的任务了，但是这里的问题十分明显，当高优先级队列中的任务不会自我休眠或高优先级队列持续有任务输入，低优先级的所有任务都会被饿死</p>
+<h3 id="Day-17"><a href="#Day-17" class="headerlink" title="Day 17"></a><strong>Day 17</strong></h3><p>多任务管理函数需要预测到系统无任何任务的情形，但是区分这种情形较为麻烦，因此，采用哨兵的机制，在任务队列的最后预留一个永远存在的哨兵任务，就可以免去这种工作</p>
+<p>接下来就要创建命令行窗口了，目前预计的功能有显示窗口和光标以及打出字来，需要以下步骤</p>
+<p>1 . 分配一个适当高度的图层，并制作窗口ui</p>
+<p>2 . 新建一个函数用于接收缓冲区的数据，并进行判断(如0和1为光标定时器超时的标志)，与HariMain()中的代码相似</p>
+<p>3 . 进行任务注册，并设定level和优先级</p>
+<p>由于task_a的优先级为1，task_con的优先级为2，故此时不可能有文字能够输入到命令行窗口上，因此需要进行设定，能够通过某种方式(如win可以用鼠标来选择窗口)来使文字输入到想要的窗口</p>
+<p>1 . 设定按下某个键可以进行窗口切换，如Tab(也可以自行设定为其他的)，找到Tab的键值(0x0f)，当缓冲区的数据为0x10f时，就进行切换(如设置flag，把flag设为不同的值就代表不同的窗口)</p>
+<p>2 . 设置变量flag，flag为0时表示此时字符将输入给task_a，按下tab会将flag修改为1，字符会输入给task_con的缓冲区，从而激活task_con，下一次时钟中断时，task_a的缓冲区无数据，故从任务队列中离开，task_con就能处理缓冲区数据</p>
+<p>3 . 为了处理退格键，task_con()要判断缓冲区的值，若为可见字符，则打印出来，若为退格键的键值，则回退一位，并相应地设置光标的坐标</p>
+<p>但是很明显这样并不能处理shift按出的符号，因此需要采取以下策略</p>
+<p>1 . 设置一个标志位flag，flag为0表示此时没有按下shift，不为0则代表按下了shift，并设置另一个键值与字符的对应表以查找同时按下shift和另外一个键的时候会得到的符号</p>
+<p>2 . 按键按下和松开的键值是成对出现的，因此可以直接从缓冲区判断shift是按下还是松开并设置相关flag</p>
+<p>目前输入的字母只能显示大写，这是因为未对Shift和CapsLock进行判断，当且仅当CapsLock和Shift同时选中或同时不选中时，输入的字母为小写，而CapsLock的状态可以从binfo-&gt;leds的第6位得知，因此可以判断key_shift和binfo-&gt;leds的第6位是否同为0或同为1，若是，把缓冲区的键值加上0x20，大写字母的键值加上0x20就为小写字母的键值，然后显示到屏幕上</p>
+<p>那么有没有办法设置指示灯呢，当然可以，只要向键盘控制器发送对应的数据就可以进行设置</p>
+<p>1 . 准备好要发送的数据，先发送0xed，再发送0x??，??的第0位代表ScrollLock，第1位代表NumLock，第2位代表CapsLock(置1为打开)，其余位设置为0</p>
+<p>2 . 往0x60端口依次发送数据，每发送一次数据若返回0xfa，则代表发送成功，可以发送下一个数据，若返回0xfe，则需要等待键盘控制器准备好后，再发送一次未发送成功的数据</p>
+<p>两次发送成功后就可以设置对应的Lock灯打开或关闭了</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/09/30天自制os/" data-id="cjtmw7i5u0000ecvbt94l6657" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/03/09/30天自制os/" data-id="cjtwrha1o0000ggvberzs7mvv" class="article-share-link">分享</a>
       
       
     </footer>
@@ -537,21 +584,6 @@ new WOW().init();
 
 
 
-  </div>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 <script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/z16.model.json"},"display":{"position":"left","width":150,"height":300},"mobile":{"show":true},"log":false});</script></body>
 </html>
