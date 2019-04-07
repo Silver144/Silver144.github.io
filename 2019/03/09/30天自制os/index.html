@@ -12,7 +12,7 @@
 <meta property="og:site_name" content="Alice Blackbarn">
 <meta property="og:description" content="MathJax.Hub.Config({tex2jax: {inlineMath: [[&apos;$&apos;,&apos;$&apos;], [&apos;\\(&apos;,&apos;\\)&apos;]]}});   Day 0了解基本信息 1 . 此书所述的操作系统是用C语言和汇编写成的 2 . 此书的操作环境为Windows 3 . 步骤为，编写源代码-&amp;gt;编译成机器语言-&amp;gt;生成软盘镜像文件-&amp;gt;写入磁盘并作成启动盘 4 . 阶段性计划">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-31T10:07:50.327Z">
+<meta property="og:updated_time" content="2019-04-07T08:42:22.754Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="30天自制os">
 <meta name="twitter:description" content="MathJax.Hub.Config({tex2jax: {inlineMath: [[&apos;$&apos;,&apos;$&apos;], [&apos;\\(&apos;,&apos;\\)&apos;]]}});   Day 0了解基本信息 1 . 此书所述的操作系统是用C语言和汇编写成的 2 . 此书的操作环境为Windows 3 . 步骤为，编写源代码-&amp;gt;编译成机器语言-&amp;gt;生成软盘镜像文件-&amp;gt;写入磁盘并作成启动盘 4 . 阶段性计划">
@@ -332,11 +332,55 @@
 <p>1 . 准备好要发送的数据，先发送0xed，再发送0x??，??的第0位代表ScrollLock，第1位代表NumLock，第2位代表CapsLock(置1为打开)，其余位设置为0</p>
 <p>2 . 往0x60端口依次发送数据，每发送一次数据若返回0xfa，则代表发送成功，可以发送下一个数据，若返回0xfe，则需要等待键盘控制器准备好后，再发送一次未发送成功的数据</p>
 <p>两次发送成功后就可以设置对应的Lock灯打开或关闭了</p>
+<h3 id="Day-18"><a href="#Day-18" class="headerlink" title="Day 18"></a><strong>Day 18</strong></h3><p>今天的第一个任务是控制光标只在被选中的窗口进行闪烁</p>
+<p>1 . 在所有关于光标的活动中设置一个flag，当flag大于0时光标的活动(如着色、缓冲区刷新)才能够进行，否则不能进行，flag的值由tab键决定</p>
+<p>2 . 若是由一个任务窗口切换到另一个任务窗口，则可以在切换的时候向其缓冲区传递信号，这里，实现的是2为激活光标，3为关闭光标，故可以在另一个任务函数设置若缓冲区接收到2，则flag设为相应的数据，为3则为-1</p>
+<p>接下来要让命令行接收回车，秉性先做样子再做功能的原则，先实现按回车能够让光标往下移一行，与光标在最后一行时让最上面一行消失的效果</p>
+<p>1 . 在console_task函数中加入cursor_y变量，设置为缓冲区收到数据266(回车的键值是10)之后cursor_y加1并输出提示符，之后刷新光标就会在下一行显示 </p>
+<p>2 . 当光标在最后一行时，cursor_y设置为不变，并且把缓冲区的所有字符向上移一行(即将(x, y)的值设置为(x, y+16)的值)，最后一行用空格代替，刷新屏幕后即可看到效果</p>
+<p>然后开始编写这个命令行的第一个命令mem，作用是显示所有内存和可用内存</p>
+<p>1 . 设置字符数组cmdline，作用是存储在此行输入的字符串，每输入一个通常意义的可见字符，cmdline就会接收这个字符减256的值，按下回车时进行判断</p>
+<p>2 . 按下回车时，若cmd为空，则为执行换行操作，若为”mem”，则在屏幕中打印出总内存和可用内存的值，这个值在<strong>day 9</strong>中的操作可以得到，若为其他字符串，则输出”Bad Command”</p>
+<p>3 . 内存的值是在Harimain中得到的，因此事先要为task_console开辟一块内存作为栈，并将内存的值压入栈中</p>
+<p>cls命令十分简单，仅仅在判断cmdline中的值正确之后将显示窗口部分的缓冲区填满空格对应的数就行了</p>
+<p>最后是dir命令，通常这个命令可以输出当前目录的文件信息，由于目前本操作系统并没有文件系统，因此仅仅输出磁盘映像中的文件</p>
+<p>1 . 在进入32位模式之前，操作系统已经将磁盘信息写入内存，存放文件信息的开始地址在映像中是0x2600，在内存中就是0x102600</p>
+<p>2 . 每个文件的信息有固定的形式，我们可以设置结构体来存放，0~7字节为文件名，如果第一个字节为0xe5就代表文件已删除，8~10字节为文件扩展名，第11字节为属性信息，12~21字节为保留字节，22~25字节为时间戳，26~27字节表示的是此文件在磁盘上存储的扇区号，28~31字节为文件大小</p>
+<p>3 . 要实现这个命令，只需判断cmdline的值，若是，则用字符串格式化存放文件名、扩展名与大小，然后显示到屏幕即可</p>
+<p>我在这里改了一下Makefile，把自己的一个文件a.txt复制到磁盘了，最终也得到了正确的显示</p>
+<h3 id="Day-19"><a href="#Day-19" class="headerlink" title="Day 19"></a><strong>Day 19</strong></h3><p>今天的第一个任务是编写type命令，效果相当于cat命令，命令格式为type x.x </p>
+<p>1 . 首先需要找到文件x.x在内存中的位置，这个可以从文件信息的clustno得出，计算公式为 实际地址 = 0​x​103e00 + clustno$\times$0x200</p>
+<p>2 . 判断逻辑为，先获取文件名并全部转化为大写，然后在0x2600开头的内存中寻找符合文件名的文件信息，若找到则读取clustno，并根据公式来计算存储地址，然后读出其大小，最后逐个字符打印即可，若没找到，则输出”File not found”，由于0x4200就是haribote.sys存储的位置，因此最多只有224个文件信息</p>
+<p>3 . 由于不支持制表符、换行符和回车符，因此需要进行设置，为了让Windows与Linux的文件都能正确显示，回车符设置为什么也不做，制表符设置为最大长度四个字节，让光标与最近的四字节对齐，换行就重置cursor_x，cursor_y加1</p>
+<p>但是上述type命令能正确显示的前提是文件大小不能超过512字节，因此需要添加对FAT的支持</p>
+<p>1 . 如果遇到的文件大小大于512字节，则会将剩下的部分存在另外的扇区，而这个扇区的号码信息存放于0x100200~0x1013ff的区域，名为文件分配表(FAT)</p>
+<p>2 . FAT的数据被进行了压缩，以3个字节代替2个数，12 34 56会被解码成412 563，FAT的第N个数据为FF8~FFF的数则代表文件数据结束，否则代表此文件的数据没有结束，值则为接下来的数据存放的clustno，比如FAT的第1个数据为2，则clustno为1的文件没有结束，接下来512个字节的数据会存放到2号扇区所在的区域</p>
+<p>3 . 对于新的type命令，先对FAT进行解压缩，然后申请一块新的内存用于存放文件，然后不断判断大小，若小于512，则写入后直接返回，若大于512，写入512字节后得到新的clustno并把大小减512，直至大小小于512</p>
+<p>由于书上没有测试，因此我自己往软盘写入了一个大小684字节的文件并执行type</p>
+<p>很明显，它正确打印出了最后的字符，其实前面的也打印了，不过换行的速度太快</p>
+<p>接下来就要实现编写应用程序了，执行程序的过程是，首先将程序内容读取至内存，然后在GDT中进行注册，最后进行farjmp</p>
+<p>1 . 编写一个程序命名为HLT，后缀为HRB，最简单的效果就是hlt并不断循环，这样会整个死机，效果明显</p>
+<p>2 . 在命令行窗口的程序中添加对字段”hlt”的支持，使得输入hlt后将HLT.HRB读入分配的内存，在GDT中注册，最后进行farjmp，若文件丢失，输出”File not found”</p>
+<p>3 . 由于GDT的1~1002号已被注册，故只能注册1002以后的号</p>
+<h3 id="Day-20"><a href="#Day-20" class="headerlink" title="Day 20"></a><strong>Day 20</strong></h3><p>API为应用程序接口，是一些预先定义的函数，在操作系统中一般都会有API，今天首先实现能够显示字符的API</p>
+<p>1 . 使用一个测试程序，设置为将自定的字符移入al后调用_asm_cons_putchar()来将其打印至屏幕上，_asm_cons_putchar()的作用是先将待打印的值和console结构体地址压入栈再调用_cons_putchar()</p>
+<p>2 . _asm_cons_putchar()所在的位置hlt.hrb是不知道的，所以需要在操作系统make过后再在bootpack.map中手动查询其地址并写进hlt.nas</p>
+<p>3 . 由于系统的段在GDT注册为2号，hlt.hrb所在的段号为1003，因此，hlt.hrb中需要使用far-call，相应的在_asm_cons_putchar()结尾需要使用retf来返回</p>
+<p>一般来说，在应用程序执行结束后，用户能够操作控制台执行下一个程序，这里设置为无限hlt，在之前的代码中，并不打算返回，因此使用了farjmp，可以改成使用farcall，然后在程序中使用retf返回</p>
+<p>由于_asm_cons_putchar()的地址在每次编译的时候可能会变化，需要修改hlt.hrb的指令，这十分浪费时间，而且调用操作系统的函数时，地址也不应该需要应用程序担心，因此，采用中断处理时使用的策略来解决</p>
+<p>1 . IRQ只有15个，CPU通知异常的中断有32个，然而IDT可以设置256个函数，所以，可以将_asm_cons_putchar()注册在IDT中，号码可以是0x30~0xff任意，设为0x50，hlt.hrb只需要把字符存在al中，使用int 0x50指令就可以打印出字符了</p>
+<p>2 . 由于_asm_cons_putchar()成为了中断处理函数，因此在结尾返回的时候需要使用指令IRETD</p>
+<p>对于不同的可执行文件xx.hrb，目前的格局是有多少个可执行文件命令行窗口就要设置多少条指令，这显然很不可取，因此，需要进行自动判断</p>
+<p>1 . 总体设计思路为保留一部分原有命令，如cls，mem等，若cmdline中的字符串为某个可执行文件名，则取出并执行，否则输出”Bad command”</p>
+<p>2 . 判断的过程为首先判断输入的字符串是否在磁盘中，若不在，加上.hrb再查找一次，这样不管是输入xx还是xx.hrb都能够执行xx.hrb，还是不在就确信没有此文件，若有，分配内存，执行，farcall，回收内存，并返回</p>
+<p>在使用寄存器来指示字符所在位置时需要注意，int 0x40中不会自动保存寄存器的数值，故应该手动进行pushad和popad操作</p>
+<p>然后实现在cmd窗口打印字符串的API，设置不同方式打印，具体的方式由ah决定，书上设定了三种，但我觉得第一种毫无必要</p>
+<p>第2种方式是打印以’’\0’结尾的字符串，作者本来想直接使用ebx存储地址，但是错误在于应用程序被载入内存后会有一个偏移，导致以ebx为地址的字符串并不是我们所希望的字符串，故在调用api后，需要把ebx加上申请到的内存的开始地址作为cons_putchar0()的参数，这样才能正确定位到我们的字符串</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/09/30天自制os/" data-id="cjtwrha1o0000ggvberzs7mvv" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/03/09/30天自制os/" data-id="cju6oidod0000n8vbf3vlpbh7" class="article-share-link">分享</a>
       
       
     </footer>
@@ -584,6 +628,21 @@ new WOW().init();
 
 
 
-  </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 <script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/z16.model.json"},"display":{"position":"left","width":150,"height":300},"mobile":{"show":true},"log":false});</script></body>
 </html>
