@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-09-28T14:27:59.936Z</updated>
+  <updated>2019-09-28T14:35:12.216Z</updated>
   <id>http://yoursite.com/</id>
   
   <generator uri="http://hexo.io/">Hexo</generator>
@@ -16,16 +16,16 @@
     <link href="http://yoursite.com/2019/09/27/haskell-archive/"/>
     <id>http://yoursite.com/2019/09/27/haskell-archive/</id>
     <published>2019-09-27T03:39:42.000Z</published>
-    <updated>2019-09-28T14:27:59.936Z</updated>
+    <updated>2019-09-28T14:35:12.216Z</updated>
     
-    <content type="html"><![CDATA[<h4 id="foldl"><a href="#foldl" class="headerlink" title="foldl"></a>foldl</h4><p>f x y = … (arg = 2) x为累计，y为list接下来的</p><h4 id="words"><a href="#words" class="headerlink" title="words"></a>words</h4><p>“aa  bb \ t  cc  \n dd” -&gt; [“aa”, “bb”, “cc”, “dd”]</p><p>可配合<code>getLine​</code></p><h4 id="getContents"><a href="#getContents" class="headerlink" title="getContents"></a>getContents</h4><p>得到所有输出</p><h4 id="lines"><a href="#lines" class="headerlink" title="lines"></a>lines</h4><p>“aa\nbb\ncc\n” -&gt; [“aa”, “bb”, “cc”]</p>]]></content>
+    <content type="html"><![CDATA[<h4 id="foldl"><a href="#foldl" class="headerlink" title="foldl"></a>foldl</h4><p><code>f x y = ... (arg = 2)</code> </p><p>x为累计，y为list接下来的</p><h4 id="words"><a href="#words" class="headerlink" title="words"></a>words</h4><p><code>&quot;aa  bb \ t  cc  \n dd&quot; -&gt; [&quot;aa&quot;, &quot;bb&quot;, &quot;cc&quot;, &quot;dd&quot;]</code></p><p>可配合<code>getLine​</code></p><h4 id="getContents"><a href="#getContents" class="headerlink" title="getContents"></a>getContents</h4><p>得到所有输入</p><h4 id="lines"><a href="#lines" class="headerlink" title="lines"></a>lines</h4><p><code>&quot;aa\nbb\ncc\n&quot; -&gt; [&quot;aa&quot;, &quot;bb&quot;, &quot;cc&quot;]</code></p>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;h4 id=&quot;foldl&quot;&gt;&lt;a href=&quot;#foldl&quot; class=&quot;headerlink&quot; title=&quot;foldl&quot;&gt;&lt;/a&gt;foldl&lt;/h4&gt;&lt;p&gt;f x y = … (arg = 2) x为累计，y为list接下来的&lt;/p&gt;
-&lt;h4 id=&quot;words&quot;&gt;&lt;a 
+        &lt;h4 id=&quot;foldl&quot;&gt;&lt;a href=&quot;#foldl&quot; class=&quot;headerlink&quot; title=&quot;foldl&quot;&gt;&lt;/a&gt;foldl&lt;/h4&gt;&lt;p&gt;&lt;code&gt;f x y = ... (arg = 2)&lt;/code&gt; &lt;/p&gt;
+&lt;p&gt;x为累计，y为list接下来的
       
     
     </summary>
