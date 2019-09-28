@@ -6,10 +6,34 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-03-14T12:05:24.585Z</updated>
+  <updated>2019-09-28T14:27:59.936Z</updated>
   <id>http://yoursite.com/</id>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Haskell archive</title>
+    <link href="http://yoursite.com/2019/09/27/haskell-archive/"/>
+    <id>http://yoursite.com/2019/09/27/haskell-archive/</id>
+    <published>2019-09-27T03:39:42.000Z</published>
+    <updated>2019-09-28T14:27:59.936Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="foldl"><a href="#foldl" class="headerlink" title="foldl"></a>foldl</h4><p>f x y = … (arg = 2) x为累计，y为list接下来的</p><h4 id="words"><a href="#words" class="headerlink" title="words"></a>words</h4><p>“aa  bb \ t  cc  \n dd” -&gt; [“aa”, “bb”, “cc”, “dd”]</p><p>可配合<code>getLine​</code></p><h4 id="getContents"><a href="#getContents" class="headerlink" title="getContents"></a>getContents</h4><p>得到所有输出</p><h4 id="lines"><a href="#lines" class="headerlink" title="lines"></a>lines</h4><p>“aa\nbb\ncc\n” -&gt; [“aa”, “bb”, “cc”]</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h4 id=&quot;foldl&quot;&gt;&lt;a href=&quot;#foldl&quot; class=&quot;headerlink&quot; title=&quot;foldl&quot;&gt;&lt;/a&gt;foldl&lt;/h4&gt;&lt;p&gt;f x y = … (arg = 2) x为累计，y为list接下来的&lt;/p&gt;
+&lt;h4 id=&quot;words&quot;&gt;&lt;a 
+      
+    
+    </summary>
+    
+      <category term="archive" scheme="http://yoursite.com/categories/archive/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>快速傅里叶变换</title>

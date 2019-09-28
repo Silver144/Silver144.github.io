@@ -38,8 +38,8 @@
     <h2 class="author"></h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>13</strong><br>文章</div></a>
-      <a href="/categories"><div><strong>5</strong><br>分类</div></a>
+      <a href="/archives"><div><strong>14</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>6</strong><br>分类</div></a>
       <a href="/tags"><div><strong>1</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
@@ -65,6 +65,75 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-md5算法" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/11/11/md5算法/" class="article-date">
+  <time class="post-time" datetime="2018-11-11T09:27:46.000Z" itemprop="datePublished">
+    <span class="post-month">11月</span><br/>
+    <span class="post-day">11</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/11/md5算法/">md5算法</a>
+    </h1>
+  
+
+        <div>
+          
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/加密算法/">加密算法</a>
+  </div>
+
+          
+              
+  &nbsp; | &nbsp;
+  <div class="view-box">
+    <span id="/2018/11/11/md5算法/" class="leancloud_visitors" data-flag-title="md5算法">
+      &nbsp;阅读次数<span class="leancloud-visitors-count"></span>
+    </span>
+  </div>
+
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-数据填充"><a href="#1-数据填充" class="headerlink" title="1. 数据填充"></a>1. 数据填充</h1><p>填充消息使数据位数与448模512同余 (n ≡ 448 mod 512)，若数据长度大于512，则以512位一组，直至最后一组长度不足512，若位数小于448，则填充至448位，若大于等于448，则填充448 + 512 - n位。此处的位数指将信息转化为二进制数的位数，如”0”的位数不为1，而是8(bit)。具体填充方法如下：</p>
+<p>以”how”举例，其二进制码为01101000 01101111 01110111，共24位，填充时，在后面填充1个”1”，接下来全部填充”0”，此时，填充后的二进制码为01101000 01101111 01110111 10000000 … (416个0)，现在的位数已经到了448，最后我们要填充至512位，不要忘了还有长度，”how”总长度是24位，24的二进制码为 00110000，将其填充至448位码的后面，最后全部填充0。因此，我们最后得到的填充码为01101000 01101111 01110111 10000000  …(416个0) 00111000 …(56个0)，变成16进制就是</p>
+<p>0x86776F68&nbsp;0x00000000&nbsp;0x00000000&nbsp;0x00000000&nbsp;0x00000000&nbsp;0x00000000</p>
+<p>0x00000000&nbsp;0x00000000&nbsp;0x00000000&nbsp;0x00000000&nbsp;0x00000000&nbsp;0x00000000</p>
+<p>0x00000000&nbsp;0x00000000&nbsp;0x00000018&nbsp;0x00000000</p>
+<p>若长度大于2^64，则只取低64位进行填充<br>
+        
+          <p class="article-more-link">
+            <a href="/2018/11/11/md5算法/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/11/11/md5算法/" data-id="ck13nh6fe000aq4vb4p56rnsb" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-在hexo上添加一个live2d模型" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -124,7 +193,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/22/在hexo上添加一个live2d模型/" data-id="ck0c6s2wn000ymgvbmtfks3iq" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2018/09/22/在hexo上添加一个live2d模型/" data-id="ck13nh6fp000oq4vbkenpkvky" class="article-share-link">分享</a>
       
       
     </footer>
@@ -188,7 +257,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/16/vimrc的基础配置/" data-id="ck0c6s2vn000hmgvbpvz65llh" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2018/09/16/vimrc的基础配置/" data-id="ck13nh6fl000jq4vbw0l9sr8t" class="article-share-link">分享</a>
       
       
     </footer>
@@ -253,7 +322,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/16/东方Project-16-5-replay-解析/" data-id="ck0c6s2vq000imgvbefhcn6kr" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2018/09/16/东方Project-16-5-replay-解析/" data-id="ck13nh6fj000gq4vbzstjpmk6" class="article-share-link">分享</a>
       
       
     </footer>
@@ -309,8 +378,8 @@
     <h2 class="author"></h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>13</strong><br>文章</div></a>
-      <a href="/categories"><div><strong>5</strong><br>分类</div></a>
+      <a href="/archives"><div><strong>14</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>6</strong><br>分类</div></a>
       <a href="/tags"><div><strong>1</strong><br>标签</div></a>
     </div>
 
