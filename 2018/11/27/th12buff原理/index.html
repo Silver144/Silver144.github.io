@@ -5,17 +5,18 @@
   
   <title>th12buff原理 | Alice Blackbarn</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1. 1.25倍弹速首先找到ins505所在的内存区域 1234567891011121314151600418068   &amp;gt; \33C9          xor ecx,ecx ;  Case 1F9 of switch 004155250041806A   .  8BC3          mov eax,ebx0041806C   .  E8 8F280000   call th12">
+  <meta name="description" content="1. 1.25倍弹速首先找到ins505所在的内存区域 00418068   &amp;gt; \33C9          xor ecx,ecx ;  Case 1F9 of switch 00415525 0041806A   .  8BC3          mov eax,ebx 0041806C   .  E8 8F280000   call th12.0041A900 00418071">
+<meta name="keywords" content="逆向 东方">
 <meta property="og:type" content="article">
 <meta property="og:title" content="th12buff原理">
 <meta property="og:url" content="http://yoursite.com/2018/11/27/th12buff原理/index.html">
 <meta property="og:site_name" content="Alice Blackbarn">
-<meta property="og:description" content="1. 1.25倍弹速首先找到ins505所在的内存区域 1234567891011121314151600418068   &amp;gt; \33C9          xor ecx,ecx ;  Case 1F9 of switch 004155250041806A   .  8BC3          mov eax,ebx0041806C   .  E8 8F280000   call th12">
+<meta property="og:description" content="1. 1.25倍弹速首先找到ins505所在的内存区域 00418068   &amp;gt; \33C9          xor ecx,ecx ;  Case 1F9 of switch 00415525 0041806A   .  8BC3          mov eax,ebx 0041806C   .  E8 8F280000   call th12.0041A900 00418071">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-12-02T07:52:48.138Z">
+<meta property="og:updated_time" content="2019-12-28T05:51:40.724Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="th12buff原理">
-<meta name="twitter:description" content="1. 1.25倍弹速首先找到ins505所在的内存区域 1234567891011121314151600418068   &amp;gt; \33C9          xor ecx,ecx ;  Case 1F9 of switch 004155250041806A   .  8BC3          mov eax,ebx0041806C   .  E8 8F280000   call th12">
+<meta name="twitter:description" content="1. 1.25倍弹速首先找到ins505所在的内存区域 00418068   &amp;gt; \33C9          xor ecx,ecx ;  Case 1F9 of switch 00415525 0041806A   .  8BC3          mov eax,ebx 0041806C   .  E8 8F280000   call th12.0041A900 00418071">
   
     <link rel="alternate" href="/atom.xml" title="Alice Blackbarn" type="application/atom+xml">
   
@@ -23,13 +24,12 @@
     <link rel="icon" href="https://www.sulfur.world/favicon.ico">
   
   
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/plugin/bganimation/bg.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 </head>
+<link rel="stylesheet" href="/css/styles/xcode.css">
 
 <body>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
@@ -42,9 +42,9 @@
     <h2 class="author"></h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>17</strong><br>文章</div></a>
-      <a href="/categories"><div><strong>8</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>1</strong><br>标签</div></a>
+      <a href="/archives"><div><strong>8</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>6</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>6</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -112,22 +112,214 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="1-1-25倍弹速"><a href="#1-1-25倍弹速" class="headerlink" title="1. 1.25倍弹速"></a>1. 1.25倍弹速</h1><p>首先找到ins505所在的内存区域</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">00418068   &gt; \33C9          xor ecx,ecx ;  Case 1F9 of switch 00415525</span><br><span class="line">0041806A   .  8BC3          mov eax,ebx</span><br><span class="line">0041806C   .  E8 8F280000   call th12.0041A900</span><br><span class="line">00418071   .  69C0 14020000 imul eax,eax,0x214</span><br><span class="line">00418077   .  8B93 4C170000 mov edx,dword ptr ds：[ebx+0x174C]</span><br><span class="line">0041807D   .  8D3418        lea esi,dword ptr ds:[eax+ebx]</span><br><span class="line">00418080   .  8B42 04       mov eax,dword ptr ds:[edx+0x4]</span><br><span class="line">00418083   .  B9 01000000   mov ecx,0x1</span><br><span class="line">00418088   .  E8 330E0500   call th12.00468EC0</span><br><span class="line">0041808D   .  B9 02000000   mov ecx,0x2</span><br><span class="line">00418092   .  D99E A4040000 fstp dword ptr ds:[esi+0x4A4]</span><br><span class="line">00418098   .  8B9B 4C170000 mov ebx,dword ptr ds:[ebx+0x174C]</span><br><span class="line">0041809E   .  8B43 04       mov eax,dword ptr ds:[ebx+0x4]</span><br><span class="line">004180A1   .  E8 1A0E0500   call th12.00468EC0</span><br><span class="line">004180A6   .  D99E A8040000 fstp dword ptr ds:[esi+0x4A8]</span><br><span class="line">004180AC   .  E9 7A150000   jmp th12.0041962B</span><br></pre></td></tr></table></figure>
-<p>可以很明显看出，0x418092处的代码中，ds:[esi+0x4A4]就是存储弹幕速度的参数之一，0x4180A6同理，因此，乘以1.25就应该作如下处理：新开辟一块代码块，然后写上我们的代码<br><a id="more"></a><br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">00497</span>AD5      <span class="number">50</span>            push eax</span><br><span class="line"><span class="number">00497</span>AD6      B8 <span class="number">0000</span>A03F   mov eax,<span class="number">0x3FA00000</span>                   ;  浮点数<span class="number">1.25</span></span><br><span class="line"><span class="number">00497</span>ADB      <span class="number">50</span>            push eax</span><br><span class="line"><span class="number">00497</span>ADC      D80C24        fmul dword ptr ss:[esp]</span><br><span class="line"><span class="number">00497</span>ADF      D99E A4040000 fstp dword ptr ds:[esi+<span class="number">0x4A4</span>]</span><br><span class="line"><span class="number">00497</span>AE5      <span class="number">58</span>            pop eax                             </span><br><span class="line"><span class="number">00497</span>AE6      <span class="number">58</span>            pop eax                     </span><br><span class="line"><span class="number">00497</span>AE7    ^ E9 AC05F8FF   jmp th12<span class="number">.00418098</span></span><br><span class="line"><span class="number">00497</span>AEC      <span class="number">50</span>            push eax</span><br><span class="line"><span class="number">00497</span>AED      B8 <span class="number">0000</span>A03F   mov eax,<span class="number">0x3FA00000</span></span><br><span class="line"><span class="number">00497</span>AF2      <span class="number">50</span>            push eax</span><br><span class="line"><span class="number">00497</span>AF3      D80C24        fmul dword ptr ss:[esp]</span><br><span class="line"><span class="number">00497</span>AF6      D99E A8040000 fstp dword ptr ds:[esi+<span class="number">0x4A8</span>]</span><br><span class="line"><span class="number">00497</span>AFC      <span class="number">58</span>            pop eax                             </span><br><span class="line"><span class="number">00497</span>AFD      <span class="number">58</span>            pop eax                               </span><br><span class="line"><span class="number">00497</span>AFE    ^ E9 A905F8FF   jmp th12<span class="number">.004180</span>AC</span><br></pre></td></tr></table></figure></p>
-<p>原来的则变成了<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">00418092</span>     /E9 <span class="number">3</span>EFA0700   jmp th12<span class="number">.00497</span>AD5</span><br><span class="line"><span class="number">00418097</span>     |<span class="number">90</span>            nop</span><br><span class="line"><span class="number">00418098</span>   . |<span class="number">8B</span>9B <span class="number">4</span>C170000 mov ebx,dword ptr ds:[ebx+<span class="number">0x174C</span>]</span><br><span class="line"><span class="number">0041809</span>E   . |<span class="number">8B</span>43 <span class="number">04</span>       mov eax,dword ptr ds:[ebx+<span class="number">0x4</span>]</span><br><span class="line"><span class="number">004180</span>A1   . |E8 <span class="number">1</span>A0E0500   call th12<span class="number">.00468</span>EC0</span><br><span class="line"><span class="number">004180</span>A6     |E9 <span class="number">41F</span>A0700   jmp th12<span class="number">.00497</span>AEA</span><br><span class="line"><span class="number">004180</span>AB     |<span class="number">90</span>            nop</span><br></pre></td></tr></table></figure></p>
+<pre><code class="lang-x86asm">00418068   &gt; \33C9          xor ecx,ecx ;  Case 1F9 of switch 00415525
+0041806A   .  8BC3          mov eax,ebx
+0041806C   .  E8 8F280000   call th12.0041A900
+00418071   .  69C0 14020000 imul eax,eax,0x214
+00418077   .  8B93 4C170000 mov edx,dword ptr ds：[ebx+0x174C]
+0041807D   .  8D3418        lea esi,dword ptr ds:[eax+ebx]
+00418080   .  8B42 04       mov eax,dword ptr ds:[edx+0x4]
+00418083   .  B9 01000000   mov ecx,0x1
+00418088   .  E8 330E0500   call th12.00468EC0
+0041808D   .  B9 02000000   mov ecx,0x2
+00418092   .  D99E A4040000 fstp dword ptr ds:[esi+0x4A4]
+00418098   .  8B9B 4C170000 mov ebx,dword ptr ds:[ebx+0x174C]
+0041809E   .  8B43 04       mov eax,dword ptr ds:[ebx+0x4]
+004180A1   .  E8 1A0E0500   call th12.00468EC0
+004180A6   .  D99E A8040000 fstp dword ptr ds:[esi+0x4A8]
+004180AC   .  E9 7A150000   jmp th12.0041962B
+</code></pre>
+<p>可以很明显看出，0x418092处的代码中，ds:[esi+0x4A4]就是存储弹幕速度的参数之一，0x4180A6同理，因此，乘以1.25就应该作如下处理：新开辟一块代码块，然后写上我们的代码<br><a id="more"></a></p>
+<pre><code class="lang-x86asm">00497AD5      50            push eax
+00497AD6      B8 0000A03F   mov eax,0x3FA00000                   ;  浮点数1.25
+00497ADB      50            push eax
+00497ADC      D80C24        fmul dword ptr ss:[esp]
+00497ADF      D99E A4040000 fstp dword ptr ds:[esi+0x4A4]
+00497AE5      58            pop eax                             
+00497AE6      58            pop eax                     
+00497AE7    ^ E9 AC05F8FF   jmp th12.00418098
+00497AEC      50            push eax
+00497AED      B8 0000A03F   mov eax,0x3FA00000
+00497AF2      50            push eax
+00497AF3      D80C24        fmul dword ptr ss:[esp]
+00497AF6      D99E A8040000 fstp dword ptr ds:[esi+0x4A8]
+00497AFC      58            pop eax                             
+00497AFD      58            pop eax                               
+00497AFE    ^ E9 A905F8FF   jmp th12.004180AC
+</code></pre>
+<p>原来的则变成了</p>
+<pre><code class="lang-x86asm">00418092     /E9 3EFA0700   jmp th12.00497AD5
+00418097     |90            nop
+00418098   . |8B9B 4C170000 mov ebx,dword ptr ds:[ebx+0x174C]
+0041809E   . |8B43 04       mov eax,dword ptr ds:[ebx+0x4]
+004180A1   . |E8 1A0E0500   call th12.00468EC0
+004180A6     |E9 41FA0700   jmp th12.00497AEA
+004180AB     |90            nop
+</code></pre>
 <h4 id="注意：ins521有相同功能，需要同时改"><a href="#注意：ins521有相同功能，需要同时改" class="headerlink" title="注意：ins521有相同功能，需要同时改"></a>注意：ins521有相同功能，需要同时改</h4><hr>
-<h1 id="2-残机-1和bomb-1"><a href="#2-残机-1和bomb-1" class="headerlink" title="2. 残机+1和bomb+1"></a>2. 残机+1和bomb+1</h1><p>通过ce我们可以找到残机储存地址为0x4B0C98，bomb储存地址为0x4B0CA0，于是我们先取出来然后加1就可以了<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">add_player</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	hSnapshot = OpenProcess(PROCESS_ALL_ACCESS, <span class="literal">false</span>, (DWORD)pe.th32ProcessID);</span><br><span class="line">	<span class="keyword">int</span> player;</span><br><span class="line">	ReadProcessMemory(hSnapshot, (LPVOID)<span class="number">0x004B0C98</span>, &amp;player, <span class="number">4</span>, <span class="literal">NULL</span>);</span><br><span class="line">	player++;</span><br><span class="line">	WriteProcessMemory(hSnapshot, (LPVOID)<span class="number">0x004B0C98</span>, &amp;player, <span class="number">4</span>, <span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">add_bomb</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	hSnapshot = OpenProcess(PROCESS_ALL_ACCESS, <span class="literal">false</span>, (DWORD)pe.th32ProcessID);</span><br><span class="line">	<span class="keyword">int</span> bomb = <span class="number">0</span>;</span><br><span class="line">	ReadProcessMemory(hSnapshot, (LPVOID)<span class="number">0x004B0CA0</span>, &amp;bomb, <span class="number">4</span>, <span class="literal">NULL</span>);</span><br><span class="line">	bomb++;</span><br><span class="line">	WriteProcessMemory(hSnapshot, (LPVOID)<span class="number">0x004B0CA0</span>, &amp;bomb, <span class="number">4</span>, <span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="2-残机-1和bomb-1"><a href="#2-残机-1和bomb-1" class="headerlink" title="2. 残机+1和bomb+1"></a>2. 残机+1和bomb+1</h1><p>通过ce我们可以找到残机储存地址为0x4B0C98，bomb储存地址为0x4B0CA0，于是我们先取出来然后加1就可以了</p>
+<pre><code class="lang-cpp">void add_player()
+{
+    hSnapshot = OpenProcess(PROCESS_ALL_ACCESS, false, (DWORD)pe.th32ProcessID);
+    int player;
+    ReadProcessMemory(hSnapshot, (LPVOID)0x004B0C98, &amp;player, 4, NULL);
+    player++;
+    WriteProcessMemory(hSnapshot, (LPVOID)0x004B0C98, &amp;player, 4, NULL);
+}
+
+void add_bomb()
+{
+    hSnapshot = OpenProcess(PROCESS_ALL_ACCESS, false, (DWORD)pe.th32ProcessID);
+    int bomb = 0;
+    ReadProcessMemory(hSnapshot, (LPVOID)0x004B0CA0, &amp;bomb, 4, NULL);
+    bomb++;
+    WriteProcessMemory(hSnapshot, (LPVOID)0x004B0CA0, &amp;bomb, 4, NULL);
+}
+</code></pre>
 <hr>
-<h1 id="3-miss不会损失power"><a href="#3-miss不会损失power" class="headerlink" title="3. miss不会损失power"></a>3. miss不会损失power</h1><p>通过ce我们可以找到power存储在0x40BC48，通过ce的跟踪功能我们故意miss一次就可以得到miss掉p的函数所在<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">00439440</span>  /$  A1 <span class="number">480</span>C4B00   mov eax,dword ptr ds:[<span class="number">0x4B0C48</span>]</span><br><span class="line"><span class="number">00439445</span>  |.  <span class="number">2B</span>4424 <span class="number">04</span>     sub eax,dword ptr ss:[esp+<span class="number">0x4</span>]</span><br><span class="line"><span class="number">00439449</span>  |.  <span class="number">8B</span>0D D40C4B00 mov ecx,dword ptr ds:[<span class="number">0x4B0CD4</span>]</span><br><span class="line"><span class="number">0043944F</span>  |.  <span class="number">3B</span>C1          cmp eax,ecx                             </span><br><span class="line"><span class="number">00439451</span>  |.  A3 <span class="number">480</span>C4B00   mov dword ptr ds:[<span class="number">0x4B0C48</span>],eax</span><br><span class="line"><span class="number">00439456</span>  |.  <span class="number">7</span>D <span class="number">06</span>         jge <span class="keyword">short</span> th12<span class="number">.0043945</span>E</span><br><span class="line"><span class="number">00439458</span>  |.  <span class="number">890</span>D <span class="number">480</span>C4B00 mov dword ptr ds:[<span class="number">0x4B0C48</span>],ecx         </span><br><span class="line"><span class="number">0043945</span>E  |&gt;  <span class="number">33</span>C0          xor eax,eax</span><br><span class="line"><span class="number">00439460</span>  \.  C2 <span class="number">0400</span>       retn <span class="number">0x4</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="3-miss不会损失power"><a href="#3-miss不会损失power" class="headerlink" title="3. miss不会损失power"></a>3. miss不会损失power</h1><p>通过ce我们可以找到power存储在0x40BC48，通过ce的跟踪功能我们故意miss一次就可以得到miss掉p的函数所在</p>
+<pre><code class="lang-x86asm">00439440  /$  A1 480C4B00   mov eax,dword ptr ds:[0x4B0C48]
+00439445  |.  2B4424 04     sub eax,dword ptr ss:[esp+0x4]
+00439449  |.  8B0D D40C4B00 mov ecx,dword ptr ds:[0x4B0CD4]
+0043944F  |.  3BC1          cmp eax,ecx                             
+00439451  |.  A3 480C4B00   mov dword ptr ds:[0x4B0C48],eax
+00439456  |.  7D 06         jge short th12.0043945E
+00439458  |.  890D 480C4B00 mov dword ptr ds:[0x4B0C48],ecx         
+0043945E  |&gt;  33C0          xor eax,eax
+00439460  \.  C2 0400       retn 0x4
+</code></pre>
 <p>把0x439445处nop掉就可以了</p>
 <hr>
-<h1 id="4-可续关"><a href="#4-可续关" class="headerlink" title="4.可续关"></a>4.可续关</h1><p>首先我们可以看到，miss处的汇编为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">004381E0  /$  51            push ecx                               </span><br><span class="line">004381E1  |.  53            push ebx</span><br><span class="line">004381E2  |.  BB 01000000   mov ebx,0x1</span><br><span class="line">004381E7      291D 980C4B00 sub dword ptr ds:[0x4B0C98],ebx</span><br><span class="line">004381ED  |.  55            push ebp</span><br><span class="line">004381EE  |.  57            push edi                              </span><br><span class="line">004381EF  |.  78 19         js short th12.0043820A</span><br><span class="line">004381F1  |.  A1 9C0C4B00   mov eax,dword ptr ds:[0x4B0C9C]</span><br><span class="line">004381F6  |.  8B0D 980C4B00 mov ecx,dword ptr ds:[0x4B0C98]</span><br><span class="line">004381FC  |.  8B15 E4434B00 mov edx,dword ptr ds:[0x4B43E4]</span><br><span class="line">00438202  |.  50            push eax</span><br><span class="line">00438203  |.  51            push ecx                               </span><br><span class="line">00438204  |.  52            push edx                           </span><br><span class="line">00438205  |.  E8 564CFEFF   call th12.0041CE60</span><br></pre></td></tr></table></figure></p>
-<p>可以看出，miss后残机减1，然后可以推出0x4381F1~0x438205处是用来更新屏幕上的player显示数目的。我们顺便可以看到扔雷函数中也有一处更新bomb数的汇编<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">00422F20  /$  A1 A00C4B00   mov eax,dword ptr ds:[0x4B0CA0]</span><br><span class="line">00422F25  |.  83E8 01       sub eax,0x1</span><br><span class="line">00422F28  |.  A3 A00C4B00   mov dword ptr ds:[0x4B0CA0],eax</span><br><span class="line">00422F2D  |.  79 04         jns short th12.00422F33</span><br><span class="line">00422F2F  |.  33C0          xor eax,eax</span><br><span class="line">00422F31  |.  EB 0A         jmp short th12.00422F3D</span><br><span class="line">00422F33  |&gt;  83F8 08       cmp eax,0x8</span><br><span class="line">00422F36  |.  7E 0A         jle short th12.00422F42</span><br><span class="line">00422F38  |.  B8 08000000   mov eax,0x8</span><br><span class="line">00422F3D  |&gt;  A3 A00C4B00   mov dword ptr ds:[0x4B0CA0],eax</span><br><span class="line">00422F42  |&gt;  8B0D E4434B00 mov ecx,dword ptr ds:[0x4B43E4]</span><br><span class="line">00422F48  |.  85C9          test ecx,ecx                          </span><br><span class="line">00422F4A  |.  74 0E         je short th12.00422F5A</span><br><span class="line">00422F4C  |.  8B15 A40C4B00 mov edx,dword ptr ds:[0x4B0CA4]</span><br><span class="line">00422F52  |.  52            push edx                                </span><br><span class="line">00422F53  |.  50            push eax</span><br><span class="line">00422F54  |.  51            push ecx                                 ;</span><br><span class="line">00422F55  |.  E8 E69FFFFF   call th12.0041CF40</span><br><span class="line">00422F5A  \&gt;  C3            retn</span><br></pre></td></tr></table></figure></p>
-<p>可以以后用来借鉴，于是，我们可以这么改<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">00497B</span>34      <span class="number">833</span>D <span class="number">980</span>C4B00 cmp dword ptr ds:[<span class="number">0x4B0C98</span>],<span class="number">0x0</span>          ;  比较残机是否为<span class="number">0</span></span><br><span class="line"><span class="number">00497B</span>3B      <span class="number">75</span> <span class="number">55</span>         jnz <span class="keyword">short</span> th12b<span class="number">.00497B</span>92</span><br><span class="line"><span class="number">00497B</span>3D      C705 <span class="number">980</span>C4B00 mov dword ptr ds:[<span class="number">0x4B0C98</span>],<span class="number">0x3</span></span><br><span class="line"><span class="number">00497B</span>47      C705 A00C4B00 mov dword ptr ds:[<span class="number">0x4B0CA0</span>],<span class="number">0x2</span></span><br><span class="line"><span class="number">00497B</span>51      <span class="number">50</span>            push eax</span><br><span class="line"><span class="number">00497B</span>52      <span class="number">51</span>            push ecx                                 ;  </span><br><span class="line"><span class="number">00497B</span>53      <span class="number">52</span>            push edx                                 ;  </span><br><span class="line"><span class="number">00497B</span>54      B8 <span class="number">02000000</span>   mov eax,<span class="number">0x2</span></span><br><span class="line"><span class="number">00497B</span>59      <span class="number">8B</span>0D E4434B00 mov ecx,dword ptr ds:[<span class="number">0x4B43E4</span>]</span><br><span class="line"><span class="number">00497B</span>5F      <span class="number">8B</span>15 A40C4B00 mov edx,dword ptr ds:[<span class="number">0x4B0CA4</span>]</span><br><span class="line"><span class="number">00497B</span>65      <span class="number">52</span>            push edx                                 ;  </span><br><span class="line"><span class="number">00497B</span>66      <span class="number">50</span>            push eax</span><br><span class="line"><span class="number">00497B</span>67      <span class="number">51</span>            push ecx                                 ;  </span><br><span class="line"><span class="number">00497B</span>68      E8 D353F8FF   call th12b<span class="number">.0041</span>CF40                      ;  更新bomb渲染</span><br><span class="line"><span class="number">00497B</span>6D      <span class="number">5</span>A            pop edx                                  ;  </span><br><span class="line"><span class="number">00497B</span>6E      <span class="number">59</span>            pop ecx                                  ;  </span><br><span class="line"><span class="number">00497B</span>6F      <span class="number">58</span>            pop eax                                  ;  </span><br><span class="line"><span class="number">00497B</span>70      <span class="number">813</span>D <span class="number">480</span>C4B00 cmp dword ptr ds:[<span class="number">0x4B0C48</span>],<span class="number">0xC8</span></span><br><span class="line"><span class="number">00497B</span>7A      <span class="number">73</span> <span class="number">0</span>C         jnb <span class="keyword">short</span> th12b<span class="number">.00497B</span>88</span><br><span class="line"><span class="number">00497B</span>7C      C705 <span class="number">480</span>C4B00 mov dword ptr ds:[<span class="number">0x4B0C48</span>],<span class="number">0x190</span></span><br><span class="line"><span class="number">00497B</span>86      EB <span class="number">0</span>A         jmp <span class="keyword">short</span> th12b<span class="number">.00497B</span>92</span><br><span class="line"><span class="number">00497B</span>88      C705 <span class="number">980</span>C4B00 mov dword ptr ds:[<span class="number">0x4B0C98</span>],<span class="number">0x1F4</span>        ;  power置成<span class="number">500</span></span><br><span class="line"><span class="number">00497B</span>92      <span class="number">291</span>D <span class="number">980</span>C4B00 sub dword ptr ds:[<span class="number">0x4B0C98</span>],ebx</span><br><span class="line"><span class="number">00497B</span>98    ^ E9 <span class="number">5006F</span>AFF   jmp th12b<span class="number">.004381</span>ED</span><br></pre></td></tr></table></figure></p>
-<p>原来的地方就会跳转到这里<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">004381E7</span>   . /E9 <span class="number">48F</span>90500   jmp th12b<span class="number">.00497B</span>34</span><br><span class="line"><span class="number">004381</span>EC     |<span class="number">90</span>            nop</span><br></pre></td></tr></table></figure></p>
+<h1 id="4-可续关"><a href="#4-可续关" class="headerlink" title="4.可续关"></a>4.可续关</h1><p>首先我们可以看到，miss处的汇编为</p>
+<pre><code class="lang-x86asm">004381E0  /$  51            push ecx                               
+004381E1  |.  53            push ebx
+004381E2  |.  BB 01000000   mov ebx,0x1
+004381E7      291D 980C4B00 sub dword ptr ds:[0x4B0C98],ebx
+004381ED  |.  55            push ebp
+004381EE  |.  57            push edi                              
+004381EF  |.  78 19         js short th12.0043820A
+004381F1  |.  A1 9C0C4B00   mov eax,dword ptr ds:[0x4B0C9C]
+004381F6  |.  8B0D 980C4B00 mov ecx,dword ptr ds:[0x4B0C98]
+004381FC  |.  8B15 E4434B00 mov edx,dword ptr ds:[0x4B43E4]
+00438202  |.  50            push eax
+00438203  |.  51            push ecx                               
+00438204  |.  52            push edx                           
+00438205  |.  E8 564CFEFF   call th12.0041CE60
+</code></pre>
+<p>可以看出，miss后残机减1，然后可以推出0x4381F1~0x438205处是用来更新屏幕上的player显示数目的。我们顺便可以看到扔雷函数中也有一处更新bomb数的汇编</p>
+<pre><code class="lang-x86asm">00422F20  /$  A1 A00C4B00   mov eax,dword ptr ds:[0x4B0CA0]
+00422F25  |.  83E8 01       sub eax,0x1
+00422F28  |.  A3 A00C4B00   mov dword ptr ds:[0x4B0CA0],eax
+00422F2D  |.  79 04         jns short th12.00422F33
+00422F2F  |.  33C0          xor eax,eax
+00422F31  |.  EB 0A         jmp short th12.00422F3D
+00422F33  |&gt;  83F8 08       cmp eax,0x8
+00422F36  |.  7E 0A         jle short th12.00422F42
+00422F38  |.  B8 08000000   mov eax,0x8
+00422F3D  |&gt;  A3 A00C4B00   mov dword ptr ds:[0x4B0CA0],eax
+00422F42  |&gt;  8B0D E4434B00 mov ecx,dword ptr ds:[0x4B43E4]
+00422F48  |.  85C9          test ecx,ecx                          
+00422F4A  |.  74 0E         je short th12.00422F5A
+00422F4C  |.  8B15 A40C4B00 mov edx,dword ptr ds:[0x4B0CA4]
+00422F52  |.  52            push edx                                
+00422F53  |.  50            push eax
+00422F54  |.  51            push ecx                                 ;
+00422F55  |.  E8 E69FFFFF   call th12.0041CF40
+00422F5A  \&gt;  C3            retn
+</code></pre>
+<p>可以以后用来借鉴，于是，我们可以这么改</p>
+<pre><code class="lang-x86asm">00497B34      833D 980C4B00 cmp dword ptr ds:[0x4B0C98],0x0          ;  比较残机是否为0
+00497B3B      75 55         jnz short th12b.00497B92
+00497B3D      C705 980C4B00 mov dword ptr ds:[0x4B0C98],0x3
+00497B47      C705 A00C4B00 mov dword ptr ds:[0x4B0CA0],0x2
+00497B51      50            push eax
+00497B52      51            push ecx                                 ;  
+00497B53      52            push edx                                 ;  
+00497B54      B8 02000000   mov eax,0x2
+00497B59      8B0D E4434B00 mov ecx,dword ptr ds:[0x4B43E4]
+00497B5F      8B15 A40C4B00 mov edx,dword ptr ds:[0x4B0CA4]
+00497B65      52            push edx                                 ;  
+00497B66      50            push eax
+00497B67      51            push ecx                                 ;  
+00497B68      E8 D353F8FF   call th12b.0041CF40                      ;  更新bomb渲染
+00497B6D      5A            pop edx                                  ;  
+00497B6E      59            pop ecx                                  ;  
+00497B6F      58            pop eax                                  ;  
+00497B70      813D 480C4B00 cmp dword ptr ds:[0x4B0C48],0xC8
+00497B7A      73 0C         jnb short th12b.00497B88
+00497B7C      C705 480C4B00 mov dword ptr ds:[0x4B0C48],0x190
+00497B86      EB 0A         jmp short th12b.00497B92
+00497B88      C705 980C4B00 mov dword ptr ds:[0x4B0C98],0x1F4        ;  power置成500
+00497B92      291D 980C4B00 sub dword ptr ds:[0x4B0C98],ebx
+00497B98    ^ E9 5006FAFF   jmp th12b.004381ED
+</code></pre>
+<p>原来的地方就会跳转到这里</p>
+<pre><code class="lang-x86asm">004381E7   . /E9 48F90500   jmp th12b.00497B34
+004381EC     |90            nop
+</code></pre>
 <hr>
 <h1 id="5-上下左右键封印"><a href="#5-上下左右键封印" class="headerlink" title="5. 上下左右键封印"></a>5. 上下左右键封印</h1><p>只需要挂个钩子就行了</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> cntHook1 = <span class="number">1</span>, cntHook2 = <span class="number">1</span>;</span><br><span class="line">HHOOK KeyHook1, KeyHook2;</span><br><span class="line"></span><br><span class="line"><span class="function">LRESULT CALLBACK <span class="title">KeyProc1</span><span class="params">(<span class="keyword">int</span> nCode, WPARAM wParam, LPARAM lParam)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (nCode != HC_ACTION) </span><br><span class="line">		<span class="keyword">return</span> CallNextHookEx(KeyHook1, nCode, wParam, lParam);</span><br><span class="line">	PKBDLLHOOKSTRUCT LowKey = <span class="literal">NULL</span>;</span><br><span class="line">	LowKey = (PKBDLLHOOKSTRUCT)lParam;</span><br><span class="line">	<span class="keyword">if</span> (LowKey-&gt;vkCode == VK_UP)</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">if</span> (LowKey-&gt;vkCode == VK_DOWN)</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">return</span> CallNextHookEx(KeyHook1, nCode, wParam, lParam);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">LRESULT CALLBACK <span class="title">KeyProc2</span><span class="params">(<span class="keyword">int</span> nCode, WPARAM wParam, LPARAM lParam)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (nCode != HC_ACTION)</span><br><span class="line">		<span class="keyword">return</span> CallNextHookEx(KeyHook2, nCode, wParam, lParam);</span><br><span class="line">	PKBDLLHOOKSTRUCT LowKey = <span class="literal">NULL</span>;</span><br><span class="line">	LowKey = (PKBDLLHOOKSTRUCT)lParam;</span><br><span class="line">	<span class="keyword">if</span> (LowKey-&gt;vkCode == VK_LEFT)</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">if</span> (LowKey-&gt;vkCode == VK_RIGHT)</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">return</span> CallNextHookEx(KeyHook2, nCode, wParam, lParam);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setHook1</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (!cntHook1)</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	cntHook1 = <span class="number">0</span>;</span><br><span class="line">	KeyHook1 = SetWindowsHookEx(WH_KEYBOARD_LL, KeyProc1, GetModuleHandle(<span class="literal">NULL</span>), <span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setHook2</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (!cntHook2)</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	cntHook2 = <span class="number">0</span>;</span><br><span class="line">	KeyHook2 = SetWindowsHookEx(WH_KEYBOARD_LL, KeyProc2, GetModuleHandle(<span class="literal">NULL</span>), <span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">unHook1</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (cntHook1)</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	cntHook1 = <span class="number">1</span>;</span><br><span class="line">	UnhookWindowsHookEx(KeyHook1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">unHook2</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (cntHook2)</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	cntHook2 = <span class="number">1</span>;</span><br><span class="line">	UnhookWindowsHookEx(KeyHook2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="lang-cpp">int cntHook1 = 1, cntHook2 = 1;
+HHOOK KeyHook1, KeyHook2;
+
+LRESULT CALLBACK KeyProc1(int nCode, WPARAM wParam, LPARAM lParam)
+{
+    if (nCode != HC_ACTION) 
+        return CallNextHookEx(KeyHook1, nCode, wParam, lParam);
+    PKBDLLHOOKSTRUCT LowKey = NULL;
+    LowKey = (PKBDLLHOOKSTRUCT)lParam;
+    if (LowKey-&gt;vkCode == VK_UP)
+        return 1;
+    if (LowKey-&gt;vkCode == VK_DOWN)
+        return 1;
+    return CallNextHookEx(KeyHook1, nCode, wParam, lParam);
+}
+
+LRESULT CALLBACK KeyProc2(int nCode, WPARAM wParam, LPARAM lParam)
+{
+    if (nCode != HC_ACTION)
+        return CallNextHookEx(KeyHook2, nCode, wParam, lParam);
+    PKBDLLHOOKSTRUCT LowKey = NULL;
+    LowKey = (PKBDLLHOOKSTRUCT)lParam;
+    if (LowKey-&gt;vkCode == VK_LEFT)
+        return 1;
+    if (LowKey-&gt;vkCode == VK_RIGHT)
+        return 1;
+    return CallNextHookEx(KeyHook2, nCode, wParam, lParam);
+}
+
+void setHook1()
+{
+    if (!cntHook1)
+        return;
+    cntHook1 = 0;
+    KeyHook1 = SetWindowsHookEx(WH_KEYBOARD_LL, KeyProc1, GetModuleHandle(NULL), 0);
+}
+
+void setHook2()
+{
+    if (!cntHook2)
+        return;
+    cntHook2 = 0;
+    KeyHook2 = SetWindowsHookEx(WH_KEYBOARD_LL, KeyProc2, GetModuleHandle(NULL), 0);
+}
+
+void unHook1()
+{
+    if (cntHook1)
+        return;
+    cntHook1 = 1;
+    UnhookWindowsHookEx(KeyHook1);
+}
+
+void unHook2()
+{
+    if (cntHook2)
+        return;
+    cntHook2 = 1;
+    UnhookWindowsHookEx(KeyHook2);
+}
+</code></pre>
 <hr>
 <h1 id="6-修改data文件夹"><a href="#6-修改data文件夹" class="headerlink" title="6. 修改data文件夹"></a>6. 修改data文件夹</h1><p>其实只要修改data文件名就可以了，使用rename函数</p>
 <blockquote>
@@ -138,34 +330,37 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/27/th12buff原理/" data-id="ck4p2657v000pscludshlr9ay" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2018/11/27/th12buff原理/" data-id="ck4p76fen00044clu9s7vwmxa" class="article-share-link">分享</a>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/逆向-东方/">逆向 东方</a></li></ul>
+
     </footer>
   </div>
   
     
 <nav id="article-nav">
   
-    <a href="/2018/12/06/latex-Greek/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2019/03/09/30天自制os/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">上一篇</strong>
       <div class="article-nav-title">
         
-          latex-Greek
+          30天自制os
         
       </div>
     </a>
   
   
-    <a href="/2018/11/14/base64加密算法/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2018/11/13/SHA-256算法/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
-      <div class="article-nav-title">base64加密算法</div>
+      <div class="article-nav-title">SHA-256算法</div>
     </a>
   
 </nav>
 
   
 </article>
+
 
 
 
@@ -208,9 +403,9 @@
     <h2 class="author"></h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>17</strong><br>文章</div></a>
-      <a href="/categories"><div><strong>8</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>1</strong><br>标签</div></a>
+      <a href="/archives"><div><strong>8</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>6</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>6</strong><br>标签</div></a>
     </div>
 
 
@@ -385,6 +580,8 @@ new WOW().init();
 
 
 
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
   </div>
 <script type="text/x-mathjax-config">

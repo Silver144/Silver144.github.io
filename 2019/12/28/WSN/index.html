@@ -12,7 +12,7 @@
 <meta property="og:site_name" content="Alice Blackbarn">
 <meta property="og:description" content="Localization时间同步 与物理世界时间因果保持一致 有助于减少冗余数据 让WSN的操作和协议的效率更高  影响因素 环境恶劣影响时钟同步 电量过少无法分配更多给时间同步 无线导致效率差以及拓扑变化或节点会突然消失 处理器弱内存少 额外硬件(GPS)">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-12-28T03:44:49.983Z">
+<meta property="og:updated_time" content="2019-12-28T05:49:03.062Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="WSN">
 <meta name="twitter:description" content="Localization时间同步 与物理世界时间因果保持一致 有助于减少冗余数据 让WSN的操作和协议的效率更高  影响因素 环境恶劣影响时钟同步 电量过少无法分配更多给时间同步 无线导致效率差以及拓扑变化或节点会突然消失 处理器弱内存少 额外硬件(GPS)">
@@ -23,13 +23,12 @@
     <link rel="icon" href="https://www.sulfur.world/favicon.ico">
   
   
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/plugin/bganimation/bg.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 </head>
+<link rel="stylesheet" href="/css/styles/xcode.css">
 
 <body>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
@@ -42,9 +41,9 @@
     <h2 class="author"></h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>17</strong><br>文章</div></a>
-      <a href="/categories"><div><strong>8</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>1</strong><br>标签</div></a>
+      <a href="/archives"><div><strong>8</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>6</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>6</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -124,12 +123,14 @@
 <li>额外硬件(GPS)</li>
 </ul>
 <a id="more"></a>
-<h5 id="GPS"><a href="#GPS" class="headerlink" title="GPS"></a>GPS</h5><p>- </p>
+<h5 id="GPS"><a href="#GPS" class="headerlink" title="GPS"></a>GPS</h5><ul>
+<li>三颗卫星已经可以定位，但是由于公式$d_i=c\cdot T_i$中，光速是十分快的，故时间同步出现很小的问题时距离的误差会变得极大，卫星中使用铯原子钟，但普通设备显然不可能</li>
+</ul>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/12/28/WSN/" data-id="ck4p265740006sclutfbqll84" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/12/28/WSN/" data-id="ck4p76fei00014clubjjqqwxt" class="article-share-link">分享</a>
       
       
     </footer>
@@ -139,15 +140,16 @@
 <nav id="article-nav">
   
   
-    <a href="/2019/10/07/css-archive/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2019/03/14/快速傅里叶变换/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
-      <div class="article-nav-title">css-archive</div>
+      <div class="article-nav-title">快速傅里叶变换</div>
     </a>
   
 </nav>
 
   
 </article>
+
 
 
 
@@ -190,9 +192,9 @@
     <h2 class="author"></h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>17</strong><br>文章</div></a>
-      <a href="/categories"><div><strong>8</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>1</strong><br>标签</div></a>
+      <a href="/archives"><div><strong>8</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>6</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>6</strong><br>标签</div></a>
     </div>
 
 
@@ -367,6 +369,8 @@ new WOW().init();
 
 
 
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
   </div>
 <script type="text/x-mathjax-config">
