@@ -108,17 +108,11 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="Localization"><a href="#Localization" class="headerlink" title="Localization"></a>Localization</h3><h5 id="时间同步"><a href="#时间同步" class="headerlink" title="时间同步"></a>时间同步</h5><ul>
-<li>与物理世界时间因果保持一致</li>
-<li>有助于减少冗余数据</li>
-<li>让WSN的操作和协议的效率更高</li>
-</ul>
-<h5 id="影响因素"><a href="#影响因素" class="headerlink" title="影响因素"></a>影响因素</h5><ul>
-<li>环境恶劣影响时钟同步</li>
-<li>电量过少无法分配更多给时间同步</li>
-<li>无线导致效率差以及拓扑变化或节点会突然消失</li>
-<li>处理器弱内存少</li>
-<li>额外硬件(GPS)</li>
+        <h3 id="Routing"><a href="#Routing" class="headerlink" title="Routing"></a>Routing</h3><h5 id="SPIN-negotiation-based-data-centric-time-driven"><a href="#SPIN-negotiation-based-data-centric-time-driven" class="headerlink" title="SPIN(negotiation-based, data-centric, time-driven )"></a>SPIN(negotiation-based, data-centric, time-driven )</h5><ul>
+<li>SPIN-PP: ADV REQ</li>
+<li>SPIN-EC: 高于能量阈值才可以参与</li>
+<li>SPIN-BC: 广播ADV REQ DATA，收到ADV后等待一段时间再发送REQ，源节点广播DATA，若有其他节点需要DATA，则在自己的timer过期前听到REQ时停止不发</li>
+<li>SPIN-RL: 若一个节点听到了REQ但是一段时间内未收到DATA，节点认定REQ或DATA丢失，会重新广播REQ，限制源节点发送DATA的频率，发送一个DATA后等待一段时间再发送另一个DATA</li>
 </ul>
         
           <p class="article-more-link">
@@ -128,7 +122,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/12/28/WSN/" data-id="ck4p7m8ma00027sludolen3en" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/12/28/WSN/" data-id="ck4pap5pa0004jglu6o6gcr0o" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/课程/">课程</a></li></ul>
@@ -200,7 +194,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/14/快速傅里叶变换/" data-id="ck4p7m8my000g7slugfq0txcp" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/03/14/快速傅里叶变换/" data-id="ck4pap5qy0019jgluuvtxctti" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/优化/">优化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
@@ -278,7 +272,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/09/30天自制os/" data-id="ck4p7m8lw00007slug0fr3u1v" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/03/09/30天自制os/" data-id="ck4pap5oy0000jgluau84rgf8" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OS/">OS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/作业/">作业</a></li></ul>
@@ -363,7 +357,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/27/th12buff原理/" data-id="ck4p7m8mi00077sludip464ih" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2018/11/27/th12buff原理/" data-id="ck4pap5pe0006jglucwpskq9d" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/东方/">东方</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/逆向/">逆向</a></li></ul>
@@ -435,7 +429,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/13/SHA-256算法/" data-id="ck4p7m8mg00067sluhbhwenni" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2018/11/13/SHA-256算法/" data-id="ck4pap5p30001jglub6mjjxxx" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/加密/">加密</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/散列/">散列</a></li></ul>
@@ -536,7 +530,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/22/在hexo上添加一个live2d模型/" data-id="ck4p7m8mu000c7slusmwca6na" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2018/09/22/在hexo上添加一个live2d模型/" data-id="ck4pap5pj000ajglupu2g2gnc" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/休闲/">休闲</a></li></ul>
@@ -636,7 +630,7 @@ inoremap &lt;Tab&gt; &lt;C-R&gt;=CleverTab()&lt;CR&gt; &quot;tab键在文中寻�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/16/vimrc的基础配置/" data-id="ck4p7m8mp00087slu7vuvro6p" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2018/09/16/vimrc的基础配置/" data-id="ck4pap5pc0005jglu6u39scz0" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/休闲/">休闲</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/配置/">配置</a></li></ul>
@@ -704,7 +698,7 @@ inoremap &lt;Tab&gt; &lt;C-R&gt;=CleverTab()&lt;CR&gt; &quot;tab键在文中寻�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/16/东方Project-16-5-replay-解析/" data-id="ck4p7m8ms000b7sluulwgdsuy" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2018/09/16/东方Project-16-5-replay-解析/" data-id="ck4pap5ph0009jgluwpfxvbhb" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/东方/">东方</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/逆向/">逆向</a></li></ul>
