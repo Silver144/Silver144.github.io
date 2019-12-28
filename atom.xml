@@ -6,19 +6,101 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-09-28T14:35:12.216Z</updated>
+  <updated>2019-12-28T03:44:49.983Z</updated>
   <id>http://yoursite.com/</id>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>WSN</title>
+    <link href="http://yoursite.com/2019/12/28/WSN/"/>
+    <id>http://yoursite.com/2019/12/28/WSN/</id>
+    <published>2019-12-28T03:32:21.000Z</published>
+    <updated>2019-12-28T03:44:49.983Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="Localization"><a href="#Localization" class="headerlink" title="Localization"></a>Localization</h3><h5 id="时间同步"><a href="#时间同步" class="headerlink" title="时间同步"></a>时间同步</h5><ul><li>与物理世界时间因果保持一致</li><li>有助于减少冗余数据</li><li>让WSN的操作和协议的效率更高</li></ul><h5 id="影响因素"><a href="#影响因素" class="headerlink" title="影响因素"></a>影响因素</h5><ul><li>环境恶劣影响时钟同步</li><li>电量过少无法分配更多给时间同步</li><li>无线导致效率差以及拓扑变化或节点会突然消失</li><li>处理器弱内存少</li><li>额外硬件(GPS)</li></ul><a id="more"></a><h5 id="GPS"><a href="#GPS" class="headerlink" title="GPS"></a>GPS</h5><p>- </p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;Localization&quot;&gt;&lt;a href=&quot;#Localization&quot; class=&quot;headerlink&quot; title=&quot;Localization&quot;&gt;&lt;/a&gt;Localization&lt;/h3&gt;&lt;h5 id=&quot;时间同步&quot;&gt;&lt;a href=&quot;#时间同步&quot; class=&quot;headerlink&quot; title=&quot;时间同步&quot;&gt;&lt;/a&gt;时间同步&lt;/h5&gt;&lt;ul&gt;
+&lt;li&gt;与物理世界时间因果保持一致&lt;/li&gt;
+&lt;li&gt;有助于减少冗余数据&lt;/li&gt;
+&lt;li&gt;让WSN的操作和协议的效率更高&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h5 id=&quot;影响因素&quot;&gt;&lt;a href=&quot;#影响因素&quot; class=&quot;headerlink&quot; title=&quot;影响因素&quot;&gt;&lt;/a&gt;影响因素&lt;/h5&gt;&lt;ul&gt;
+&lt;li&gt;环境恶劣影响时钟同步&lt;/li&gt;
+&lt;li&gt;电量过少无法分配更多给时间同步&lt;/li&gt;
+&lt;li&gt;无线导致效率差以及拓扑变化或节点会突然消失&lt;/li&gt;
+&lt;li&gt;处理器弱内存少&lt;/li&gt;
+&lt;li&gt;额外硬件(GPS)&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+      <category term="Lesson" scheme="http://yoursite.com/categories/Lesson/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>css-archive</title>
+    <link href="http://yoursite.com/2019/10/07/css-archive/"/>
+    <id>http://yoursite.com/2019/10/07/css-archive/</id>
+    <published>2019-10-07T04:05:43.000Z</published>
+    <updated>2019-12-28T03:45:01.170Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="background"><a href="#background" class="headerlink" title="background"></a>background</h3><p>设置图片: </p><p><code>background-image: url(&#39;url&#39;);</code></p><p>不重复:</p><p><code>background-repeat: no-repeat;</code></p><p>水平平铺: </p><p><code>background-repeat: repeat-x;</code></p><p>图片位置右上</p><p><code>background-position: left bottom;</code></p><p>简写按顺序分别是<code>color</code> <code>url</code> <code>repeat</code> <code>attachment(fixed表示图片不动, 否则scroll)</code></p><a id="more"></a><h3 id="Text"><a href="#Text" class="headerlink" title="Text"></a>Text</h3><p>对齐</p><p><code>text-align: center(居中) right(右对齐) justify(自适应)</code></p><p>线条</p><p><code>text-decoration: overline line-through underline(默认)</code></p><p>变换</p><p><code>text-transform: uppercase lowercase capitalize(首字母大写)</code></p><p>缩进</p><p><code>text-indident: n px</code></p><p>字符之间空间</p><p><code>letter-spacing: n px</code></p><p>行间</p><p><code>line-height: 100%</code></p><h3 id="Font"><a href="#Font" class="headerlink" title="Font"></a>Font</h3><p>字体系列</p><p><code>font-family: a, b, &quot;c d&quot;</code></p><p>字体大小</p><p><code>font-size: 1em 100%</code></p><h3 id="Link"><a href="#Link" class="headerlink" title="Link"></a>Link</h3><p><code>link.link: { background-color: #FFFFFF; }</code></p><p><code>link.visited: { background-color: #FFFFFF; }</code></p><p><code>link.hover: { background-color: #FFFFFF; }</code></p><p><code>link.active: { background-color: #FFFFFF; }</code></p><h3 id="List"><a href="#List" class="headerlink" title="List"></a>List</h3><p>无序列表</p><p><code>ul.example { list-style-type: circle square; }</code></p><p>有序列表</p><p><code>ul.example { list-style-type: upper-roman upper-alpha digit(默认); }</code></p><h3 id="Table"><a href="#Table" class="headerlink" title="Table"></a>Table</h3><p>边框大小</p><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">table</span>, <span class="selector-tag">th</span>, <span class="selector-tag">td</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="attribute">border</span>: x px solid green;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>设置折叠</p><p><code>table { table-collapse: collapse; }</code></p><p>对齐和对象大小</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">td</span><br><span class="line">&#123;</span><br><span class="line">height: x px;</span><br><span class="line">    text-align: center;</span><br><span class="line">    vertical-align: bottom;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>颜色</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">th</span><br><span class="line">&#123;</span><br><span class="line">    color: green;</span><br><span class="line">    background-color: green;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;background&quot;&gt;&lt;a href=&quot;#background&quot; class=&quot;headerlink&quot; title=&quot;background&quot;&gt;&lt;/a&gt;background&lt;/h3&gt;&lt;p&gt;设置图片: &lt;/p&gt;
+&lt;p&gt;&lt;code&gt;background-image: url(&amp;#39;url&amp;#39;);&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;不重复:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;background-repeat: no-repeat;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;水平平铺: &lt;/p&gt;
+&lt;p&gt;&lt;code&gt;background-repeat: repeat-x;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;图片位置右上&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;background-position: left bottom;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;简写按顺序分别是&lt;code&gt;color&lt;/code&gt; &lt;code&gt;url&lt;/code&gt; &lt;code&gt;repeat&lt;/code&gt; &lt;code&gt;attachment(fixed表示图片不动, 否则scroll)&lt;/code&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Archive" scheme="http://yoursite.com/categories/Archive/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>数据库系统概念</title>
+    <link href="http://yoursite.com/2019/10/02/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5/"/>
+    <id>http://yoursite.com/2019/10/02/数据库系统概念/</id>
+    <published>2019-10-02T03:52:22.000Z</published>
+    <updated>2019-10-03T10:27:19.013Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="Create-table"><a href="#Create-table" class="headerlink" title="Create table:"></a>Create table:</h3><p>如果为<code>Not NULL</code>，在后面加<code>default</code>，例子</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">quantity INTEGER NOT NULL DEFAULT 1</span><br></pre></td></tr></table></figure><h3 id="Alter-table"><a href="#Alter-table" class="headerlink" title="Alter table:"></a>Alter table:</h3><p>用来更新列，此操作不可撤销</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;Create-table&quot;&gt;&lt;a href=&quot;#Create-table&quot; class=&quot;headerlink&quot; title=&quot;Create table:&quot;&gt;&lt;/a&gt;Create table:&lt;/h3&gt;&lt;p&gt;如果为&lt;code&gt;Not NULL&lt;/code&gt;，在后面
+      
+    
+    </summary>
+    
+      <category term="archive" scheme="http://yoursite.com/categories/archive/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>Haskell archive</title>
     <link href="http://yoursite.com/2019/09/27/haskell-archive/"/>
     <id>http://yoursite.com/2019/09/27/haskell-archive/</id>
     <published>2019-09-27T03:39:42.000Z</published>
-    <updated>2019-09-28T14:35:12.216Z</updated>
+    <updated>2019-09-29T04:21:47.583Z</updated>
     
-    <content type="html"><![CDATA[<h4 id="foldl"><a href="#foldl" class="headerlink" title="foldl"></a>foldl</h4><p><code>f x y = ... (arg = 2)</code> </p><p>x为累计，y为list接下来的</p><h4 id="words"><a href="#words" class="headerlink" title="words"></a>words</h4><p><code>&quot;aa  bb \ t  cc  \n dd&quot; -&gt; [&quot;aa&quot;, &quot;bb&quot;, &quot;cc&quot;, &quot;dd&quot;]</code></p><p>可配合<code>getLine​</code></p><h4 id="getContents"><a href="#getContents" class="headerlink" title="getContents"></a>getContents</h4><p>得到所有输入</p><h4 id="lines"><a href="#lines" class="headerlink" title="lines"></a>lines</h4><p><code>&quot;aa\nbb\ncc\n&quot; -&gt; [&quot;aa&quot;, &quot;bb&quot;, &quot;cc&quot;]</code></p>]]></content>
+    <content type="html"><![CDATA[<h4 id="foldl"><a href="#foldl" class="headerlink" title="foldl"></a>foldl</h4><p><code>f x y = ... (arg = 2)</code> </p><p>x为累计，y为list接下来的</p><h4 id="words"><a href="#words" class="headerlink" title="words"></a>words</h4><p><code>&quot;aa  bb \ t  cc  \n dd&quot; -&gt; [&quot;aa&quot;, &quot;bb&quot;, &quot;cc&quot;, &quot;dd&quot;]</code></p><p>可配合<code>getLine​</code></p><h4 id="getContents"><a href="#getContents" class="headerlink" title="getContents"></a>getContents</h4><p>得到所有输入</p><h4 id="lines"><a href="#lines" class="headerlink" title="lines"></a>lines</h4><p><code>&quot;aa\nbb\ncc\n&quot; -&gt; [&quot;aa&quot;, &quot;bb&quot;, &quot;cc&quot;]</code></p><h4 id="putStr-amp-amp-putStrLn"><a href="#putStr-amp-amp-putStrLn" class="headerlink" title="putStr &amp;&amp; putStrLn"></a>putStr &amp;&amp; putStrLn</h4><p><code>putStr</code>不会换行，<code>putStrLn</code>会，<code>putChar</code>递归定义</p>]]></content>
     
     <summary type="html">
     
