@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="Alice Blackbarn">
 <meta property="og:description" content="RoutingSPIN(negotiation-based, data-centric, time-driven ) SPIN-PP: ADV REQ SPIN-EC: 高于能量阈值才可以参与 SPIN-BC: 广播ADV REQ DATA，收到ADV后等待一段时间再发送REQ，源节点广播DATA，若有其他节点需要DATA，则在自己的timer过期前听到REQ时停止不发 SPIN-RL: 若一个节">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-01-04T13:00:37.630Z">
+<meta property="og:updated_time" content="2020-01-05T08:29:44.033Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="WSN">
 <meta name="twitter:description" content="RoutingSPIN(negotiation-based, data-centric, time-driven ) SPIN-PP: ADV REQ SPIN-EC: 高于能量阈值才可以参与 SPIN-BC: 广播ADV REQ DATA，收到ADV后等待一段时间再发送REQ，源节点广播DATA，若有其他节点需要DATA，则在自己的timer过期前听到REQ时停止不发 SPIN-RL: 若一个节">
@@ -42,7 +42,7 @@
     <h2 class="author"></h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>9</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>10</strong><br>文章</div></a>
       <a href="/categories"><div><strong>6</strong><br>分类</div></a>
       <a href="/tags"><div><strong>13</strong><br>标签</div></a>
     </div>
@@ -169,37 +169,52 @@
 <li><p>D-MAC</p>
 <ul>
 <li>严格的时钟同步，大幅降低延时</li>
+<li>避免冲突使用回退</li>
 </ul>
 </li>
-<li>TRAMA<ul>
+<li><p>TRAMA</p>
+<ul>
 <li>基于流量的slot选举尽量减少给无流量的节点分配slot</li>
 <li>降低冲突率，增加休眠时间以及节省能量，缺点是需要存储空间，当某节点在属于自己的slot中且有信息发时才发信息，别的节点发送的对象是自己时接收信息，其他时候休眠</li>
 <li>random-access期间，节点收或者发拓扑信息，其长度决定节省能量的多少，得到两跳内邻居信息</li>
 <li>使用NP算法算出其在某slot的优先级，计算在一个调度周期内优先级最高的slot发送数据并发送调度信息，若无数据发送也通告，本节点的最后一个slot广播下一个调度周期的调度信息</li>
 </ul>
 </li>
-<li>LEACH<ul>
+<li><p>LEACH</p>
+<ul>
 <li>建立阶段，通过选举算法建立k个簇头，当节点知道自己是簇头后，使用CSMA发送广播，节点选择ADV能量最强的簇头使用CSMA发送Join-REQ帧成簇</li>
 <li>稳定阶段，节点在簇头发送的固定slot进行传输，其他时候休眠，簇头一直醒着，收到簇发来的信息并向BS发送</li>
 <li>使用直接序列扩频减小簇间的影响，邻居簇间使用不同的扩频序列，保留的扩频序列用于BS传输，簇头向BS传输使用CSMA，传之前探测信道有无同样的扩频码</li>
 <li>LEACH-C通过各节点把自己的位置和能量信息发送给BS，让BS决定簇头</li>
 </ul>
 </li>
-<li>PAMAS<ul>
+<li><p>PAMAS</p>
+<ul>
 <li>使用两个信道避免数据冲突，一个信道传输数据帧，另一个用来传输控制帧</li>
+<li>当sender传输RTS后，若receiver信道无占用则回复CTS，当sender未收到CTS时会使用指数后退算法传输RTS，否则正常传输，两者均发送busy tone，用来阻止邻居干扰</li>
 </ul>
 </li>
-<li>S-MAC<ul>
+<li><p>S-MAC</p>
+<ul>
 <li>一开始需要监听信道一段时间确定规划，若有很多邻居选择和自己一样的规划，延迟$t_d$时间后广播规划减小follower间的冲突，收不到调度信息则自己决定并发给所有的可能邻居</li>
 <li>周期性通过SYNC交换调度信息，使用CTS/RTS，若听到CTS/RTS则直接进入睡眠，占空比是之前就确定好了的，可能不大科学</li>
 </ul>
 </li>
-<li>T-MAC<ul>
+<li><p>T-MAC</p>
+<ul>
 <li>通过流量调整休眠和醒着的时段，每个slot的开头侦听一段时间TA，若无消息则继续休眠，当发送，接收或多余听到RTS/CTS时，消息结束后醒一小段时间看有无更多信息</li>
 <li>由于休眠太早，可能忽略之后的消息，引起早睡，发送FRTS来提醒下一个节点醒着便于及时发送数据</li>
 </ul>
 </li>
-<li>R-MAC</li>
+<li><p>R-MAC</p>
+<ul>
+<li><p>对齐占空参数，一个周期分为三个阶段， SYNC用来同步时钟，DATA阶段用来沿路发送PION(包含sender、下一跳、跳数，使用SIFS)直到到达目的</p>
+</li>
+<li><p>SLEEP阶段用来传输数据，根据PION设定的调度信息来决定唤醒时机</p>
+<script type="math/tex; mode=display">
+T_{wakeup}(i) = (i −1)×(size(DATA)+size(ACK)+2×SIFS)</script></li>
+</ul>
+</li>
 </ul>
 <h3 id="Localization"><a href="#Localization" class="headerlink" title="Localization"></a>Localization</h3><h5 id="时间同步"><a href="#时间同步" class="headerlink" title="时间同步"></a>时间同步</h5><ul>
 <li>与物理世界时间因果保持一致</li>
@@ -222,7 +237,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/12/28/WSN/" data-id="ck4zli4f10001bslu1r7a0qq0" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/12/28/WSN/" data-id="ck5125cit00008slufnt78mtx" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/课程/">课程</a></li></ul>
@@ -232,6 +247,15 @@
   
     
 <nav id="article-nav">
+  
+    <a href="/2020/01/05/人工智能/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          人工智能
+        
+      </div>
+    </a>
   
   
     <a href="/2019/10/02/数据库系统概念/" id="article-nav-older" class="article-nav-link-wrap">
@@ -286,7 +310,7 @@
     <h2 class="author"></h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>9</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>10</strong><br>文章</div></a>
       <a href="/categories"><div><strong>6</strong><br>分类</div></a>
       <a href="/tags"><div><strong>13</strong><br>标签</div></a>
     </div>

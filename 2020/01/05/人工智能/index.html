@@ -3,15 +3,20 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
-  <title>Tag: 优化 | Alice Blackbarn</title>
+  <title>人工智能 | Alice Blackbarn</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Alice Blackbarn">
-<meta property="og:url" content="http://yoursite.com/tags/优化/index.html">
+  <meta name="description" content="PAC 对于$M\times N$的矩阵(M为维数)$A$，计算协方差矩阵$\frac{1}{N}AA^T$，计算特征值与特征向量，用最大的特征值对应的向量组$R$与原矩阵相乘即得降维结果  k平均值 使用簇内某个特定的点为中心点计算代价，然后设想不同的点替换中心点时的好处，当好处最大时，停止  Agnes 每个点设为一个簇，最近的合并，不断合并到目标数目  DIANA 从一个簇开始分裂，计算簇直">
+<meta name="keywords" content="课程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="人工智能">
+<meta property="og:url" content="http://yoursite.com/2020/01/05/人工智能/index.html">
 <meta property="og:site_name" content="Alice Blackbarn">
+<meta property="og:description" content="PAC 对于$M\times N$的矩阵(M为维数)$A$，计算协方差矩阵$\frac{1}{N}AA^T$，计算特征值与特征向量，用最大的特征值对应的向量组$R$与原矩阵相乘即得降维结果  k平均值 使用簇内某个特定的点为中心点计算代价，然后设想不同的点替换中心点时的好处，当好处最大时，停止  Agnes 每个点设为一个簇，最近的合并，不断合并到目标数目  DIANA 从一个簇开始分裂，计算簇直">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-01-05T13:34:19.530Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Alice Blackbarn">
+<meta name="twitter:title" content="人工智能">
+<meta name="twitter:description" content="PAC 对于$M\times N$的矩阵(M为维数)$A$，计算协方差矩阵$\frac{1}{N}AA^T$，计算特征值与特征向量，用最大的特征值对应的向量组$R$与原矩阵相乘即得降维结果  k平均值 使用簇内某个特定的点为中心点计算代价，然后设想不同的点替换中心点时的好处，当好处最大时，停止  Agnes 每个点设为一个簇，最近的合并，不断合并到目标数目  DIANA 从一个簇开始分裂，计算簇直">
   
     <link rel="alternate" href="/atom.xml" title="Alice Blackbarn" type="application/atom+xml">
   
@@ -63,42 +68,95 @@
   </div>
 </div>
 
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap animated rubberBand">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2019/03/14/快速傅里叶变换/" class="archive-article-date">
-  <time class="post-time" datetime="2019-03-14T11:12:26.000Z" itemprop="datePublished">
-    <span class="post-month">3月</span><br/>
-    <span class="post-day">14</span>
+        <section id="main"><article id="post-人工智能" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/01/05/人工智能/" class="article-date">
+  <time class="post-time" datetime="2020-01-05T11:36:41.000Z" itemprop="datePublished">
+    <span class="post-month">1月</span><br/>
+    <span class="post-day">05</span>
   </time>
 </a>
-      
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/14/快速傅里叶变换/">快速傅里叶变换</a>
+    <h1 class="article-title" itemprop="name">
+      人工智能
     </h1>
   
 
-    </header>
+        <div>
+          
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Lesson/">Lesson</a>
   </div>
+
+          
+              
+  &nbsp; | &nbsp;
+  <div class="view-box">
+    <span id="/2020/01/05/人工智能/" class="leancloud_visitors" data-flag-title="人工智能">
+      &nbsp;阅读次数<span class="leancloud-visitors-count"></span>
+    </span>
+  </div>
+
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="PAC"><a href="#PAC" class="headerlink" title="PAC"></a>PAC</h4><ul>
+<li>对于$M\times N$的矩阵(M为维数)$A$，计算协方差矩阵$\frac{1}{N}AA^T$，计算特征值与特征向量，用最大的特征值对应的向量组$R$与原矩阵相乘即得降维结果</li>
+</ul>
+<h4 id="k平均值"><a href="#k平均值" class="headerlink" title="k平均值"></a>k平均值</h4><ul>
+<li>使用簇内某个特定的点为中心点计算代价，然后设想不同的点替换中心点时的好处，当好处最大时，停止</li>
+</ul>
+<h4 id="Agnes"><a href="#Agnes" class="headerlink" title="Agnes"></a>Agnes</h4><ul>
+<li>每个点设为一个簇，最近的合并，不断合并到目标数目</li>
+</ul>
+<h4 id="DIANA"><a href="#DIANA" class="headerlink" title="DIANA"></a>DIANA</h4><ul>
+<li>从一个簇开始分裂，计算簇直径，将直径最大的簇进行分裂，步骤如下<ul>
+<li>选一个簇内平均距离最大的点分入splinter group</li>
+<li>对每个点计算簇内最小节点距离与splinter group内最小距离，若splinter占优则加入</li>
+<li>当不更新后，分成两个簇</li>
+<li>最终分到目标簇数时结束算法</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/01/05/人工智能/" data-id="ck5125cjj00088slu2lffdgxo" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/课程/">课程</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/12/28/WSN/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">WSN</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
+
+
+
 
 </section>
         
